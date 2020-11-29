@@ -17,8 +17,36 @@ def generadorMatriz(filas, columnas):
     return M
 #MATRIZ
 mapa = generadorMatriz(128,128)
+#POBLACION INICIAL
+poblacionAbejas = []
+poblacionFlores = []
+#CONVERSOR
+#E: Un numero
+#S: Un numero binario
+#D: Convierte el numero dado en binario
+def toBin(n):
+    if n == 0:
+        return ''
+    else:
+        return toBin(n//2) + str(n%2)
+#CREADOR DE ABEJAS
+"""
+ESTRUCTURA:
+
+
+"""
+#E:
+#S:
+#D:
+
+#CREADOR DE FLORES
+#E:
+#S:
+#D:
+
 
 #GUI
+"""
 # IMAGENES
 # BK
 bg = pygame.image.load('bg.png')
@@ -40,3 +68,4 @@ reloj = pygame.time.Clock()
 font = pygame.font.SysFont("Minecraft", 20)
 font2 = pygame.font.SysFont("Minecraft", 40)
 font3 = pygame.font.SysFont("Minecraft", 10)
+"""
