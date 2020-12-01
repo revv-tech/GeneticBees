@@ -22,20 +22,21 @@ class Flor:
         self.color = (0, 0, 0)
         self.pos = (63, 63)
         self.index = (0, 0)
+        self.polen = []
 
 
-    def decodePos(dna):
+    def decodePos():
 
         genPosI = []
         genPosJ = []
 
         for i in range (0, 7):
 
-            genPosI += dna[i]
+            genPosI += self.dna[i]
 
         for i in range (7, 14):
 
-            genPosJ += dna[i]
+            genPosJ += self.dna[i]
 
         binI = int(''.join(map(str,genPosI)))
         binJ = int(''.join(map(str,genPosj)))
@@ -50,13 +51,13 @@ class Flor:
             
 
     
-    def decodeColor(dna):
+    def decodeColor():
 
         genColor = []
 
         for i in range(14, 17):
 
-            genColor.append(dna[i])
+            genColor.append(self.dna[i])
 
         for i in range(0, len(genColor)):
 

@@ -25,13 +25,26 @@ def decimalToBinary(n):
 
 def genFlowerPoblation(maxPop):
 
+    flowersPos = []
+
     for i in range(0, maxPop):
 
 
         dna = []
         n = randint(0, 7)
+        
         i = randint(0, 127)
         j = randint(0, 127)
+        pos = (i, j)
+        
+        while pos in flowersPos:
+
+            i = randint(0, 127)
+            j = randint(0, 127)
+            pos = (i, j)
+
+        flowersPos.append(pos)
+        
         genI = decimalToBinary(i)
         genJ = decimalToBinary(j)
         genColor = decimalToBinary(n)
@@ -66,7 +79,8 @@ def genFlowerPoblation(maxPop):
 
             dna.append(int(bit))
 
-        poblacionFlores.append(Flor(dna))
+        newFlower = Flor(dna)
+        poblacionFlores.append(newFlower)
 
 
     #for flor in poblacionFlores:
