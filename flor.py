@@ -13,7 +13,7 @@
 # los siguientes 7 bits son de la posicion j
 # y los siguientes 3 bits son del color
 # Estos estarán en el DNA
-
+#[1,0,1,0,1,0,1,1,0,1,0,1,0,1,0,1,0]
 class Flor:
     
     def __init__(self, dna):

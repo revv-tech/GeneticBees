@@ -48,49 +48,55 @@ ESTRUCTURA:
 #S:
 #D:
 
-def genFlowerPoblation():
+def genFlowerPoblation(maxPop):
 
-    for i in range(0, 127):
+    for i in range(0, maxPop):
 
-        for j in range(0, 127):
+        dna = []
+        n = randint(0, 7)
+        i = randint(0, 127)
+        j = randint(0, 127)
+        genI = decimalToBinary(i)
+        genJ = decimalToBinary(j)
+        genColor = decimalToBinary(n)
 
-            row = []
-            if i == 63 and j == 63:
+        if len(genI) < 7:
 
+            for i in range(0, 7-len(genI)):
 
-                row.append(Flor([]))
-                continue
+                dna.append(0)
+       
+        for bit in genI:
+
+            dna.append(int(bit))
+
+        if len(genJ) < 7:
+
+            for i in range(0, 7-len(genJ)):
+
+                dna.append(0) 
+
+        for bit in genJ:
+
+            dna.append(int(bit))
+
+        if len(genColor) < 3:
             
-            else:
+            for i in range(0, 3-len(genColor)):
+
+                dna.append(0)
                 
-                dna = []
-                n = randint(0, 8)
-                genI = decimalToBinary(i)
-                genJ = decimalToBinary(j)
-                genColor = decimalToBinary(n)
+        for bit in genColor:
 
-                for bit in genI:
+            dna.append(int(bit))
 
-                    dna.append(bit)
-
-                for bit in genJ:
-
-                    dna.append(bit)
-
-                for bit in genColor:
-
-                    dna.append(bit)
-
-                row.append(Flor(dna))
-
-        poblacionFlores.append(row)
+        print(dna)
+        poblacionFlores.append(Flor(dna))
 
 
-    for row in poblacionFlores:
+    #for flor in poblacionFlores:
 
-        for flor in row:
-
-            print(flor.dna)
+     #   print(flor.dna)
 
                        
 
