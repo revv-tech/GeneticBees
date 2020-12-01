@@ -3,26 +3,9 @@
 import pygame
 from random import randint
 from flor import Flor
-
-
+from abejas import Abejas
+from numpy import binary_repr
 pygame.init()
-
-
-#CORREGIR LA MATRIZ CON LAS STRUCTS
-# E: Dos ints
-# S: Una Matriz
-# D:Crea una matriz con la cantidad de C y F que se le pase
-def generadorMatriz(filas, columnas):
-    M = []
-    for i in range(columnas):
-        columna = [0]*filas
-        M.append(columna)
-
-    return M
-
-
-#MATRIZ
-mapa = generadorMatriz(128,128)
 
 
 #POBLACION INICIAL
@@ -37,16 +20,7 @@ poblacionFlores = []
 def decimalToBinary(n):  
     return bin(n).replace("0b", "")
 
-    
-#CREADOR DE ABEJAS
-"""
-ESTRUCTURA:
 
-
-"""
-#E:
-#S:
-#D:
 
 def genFlowerPoblation():
 
@@ -93,7 +67,34 @@ def genFlowerPoblation():
             print(flor.dna)
 
                        
+#PRIMERA GEN DE ABEJAS
+def genAbejasGenerator(n):
+    global poblacionAbejas
+    for i in range(n):
 
+        newBee = []
+
+        #COLOR
+        newColor = randint(0, 8)
+        #DIRECCION
+        newDir = randint(0, 8)
+        #DISTANCIA
+        newDist = randint(0, 64)
+        #TIPO
+        newTipo = randint(0, 3)
+        #ANGULO DESVIACION (PROVISIONAL)
+        newAngulo = randint(0,31)
+
+        newBee = [newColor] + [newDir] + [newDist] + [newTipo] + [newAngulo]
+        newBeeAux = [binary_repr(newColor)]+[binary_repr(newDir)]+ [binary_repr(newDist)] + [binary_repr(newTipo)] + [binary_repr(newAngulo)]
+        print(i)
+        print(newBee)
+        print(newBeeAux)
+        poblacionAbejas.append(newBee)
+
+    return
+        
+        
 
 #GUI
 """
