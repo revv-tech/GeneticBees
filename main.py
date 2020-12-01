@@ -23,8 +23,55 @@ def decimalToBinary(n):
 
 
 
-def genFlowerPoblation():
-    return
+def genFlowerPoblation(maxPop):
+
+    for i in range(0, maxPop):
+
+
+        dna = []
+        n = randint(0, 7)
+        i = randint(0, 127)
+        j = randint(0, 127)
+        genI = decimalToBinary(i)
+        genJ = decimalToBinary(j)
+        genColor = decimalToBinary(n)
+        
+        if len(genI) < 7:
+
+            for i in range(0, 7-len(genI)):
+
+                dna.append(0)
+                
+        for bit in genI:
+
+            dna.append(int(bit))
+
+        if len(genJ) < 7:
+
+            for i in range(0, 7-len(genJ)):
+
+                dna.append(0)
+                
+        for bit in genJ:
+
+            dna.append(int(bit))
+
+        if len(genColor) < 3:
+            
+            for i in range(0, 3-len(genColor)):
+
+                dna.append(0)
+                
+        for bit in genColor:
+
+            dna.append(int(bit))
+
+        poblacionFlores.append(Flor(dna))
+
+
+    #for flor in poblacionFlores:
+
+     #   print(flor.dna)
           
 #PRIMERA GEN DE ABEJAS
 def genAbejasGenerator(n):
