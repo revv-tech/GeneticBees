@@ -3,8 +3,9 @@
 import pygame
 from random import randint
 from flor import Flor
-from abejas import Abejas
+from abejas import Abeja
 from numpy import binary_repr
+
 pygame.init()
 
 
@@ -21,7 +22,7 @@ def decimalToBinary(n):
     return bin(n).replace("0b", "")
 
 
-
+#PRIMERA GEN DE FLORES
 
 def genFlowerPoblation(maxPop):
 
@@ -87,49 +88,68 @@ def genFlowerPoblation(maxPop):
 
      #   print(flor.dna)
           
-#PRIMERA GEN DE ABEJAS
-def genAbejasGenerator(n):
-    global poblacionAbejas
-    for i in range(n):
+#PRIMERA GEN DE ABEJAS--------------------------------------
 
-        newBee = []
+def genAbejasGenerator(n):
+    
+    global poblacionAbejas
+
+    for i in range(0,n):
+
+        newBeeDNA = []
 
         #COLOR
-        newColor = randint(0, 8)
+        newColor = randint(0, 7)
         #DIRECCION
-        newDir = randint(0, 8)
+        newDir = randint(0, 7)
         #DISTANCIA
-        newDist = randint(0, 64)
+        newDist = randint(0, 63)
         #TIPO
         newTipo = randint(0, 3)
         #ANGULO DESVIACION (PROVISIONAL)
         newAngulo = randint(0,31)
-
-        newBee = [newColor] + [newDir] + [newDist] + [newTipo] + [newAngulo]
-        newBeeAux = [binary_repr(newColor)]+[binary_repr(newDir)]+ [binary_repr(newDist)] + [binary_repr(newTipo)] + [binary_repr(newAngulo)]
-        print(i)
-        print(newBee)
-        print(newBeeAux)
+        #DNA ABEJA
+        newBeeDNA = transBinaryFormat(newColor,3) + transBinaryFormat(newDir,3) + transBinaryFormat(newAngulo,6) + transBinaryFormat(newDist,6) + transBinaryFormat(newTipo,2)
+        #NUEVA ABEJA
+        newBee = Abeja(newBeeDNA)
         poblacionAbejas.append(newBee)
+    """  
+    for j in range(0,len(poblacionAbejas)):
+        print()
+        print("Abeja #",j)
+        poblacionAbejas[j].decodeInfo()
+        poblacionAbejas[j].printInfo()
+        print()
 
     return
+    """
+
+    
         
-        
+def transBinaryFormat(data,rangeBits):
+    
+    bitChain = decimalToBinary(data)
+    dnaChain = []
+
+    if len(bitChain) < rangeBits:
+        for i in range(0, rangeBits-len(bitChain)):
+            dnaChain.append(0)
+                
+    for bit in bitChain:
+            
+        dnaChain.append(int(bit))
+    
+    return dnaChain
+                
 
 #GUI
 """
 # IMAGENES
-# BK
-bg = pygame.image.load('bg.png')
-# VACIO
-vacio = pygame.image.load("vacio.png")
-# Boton Pausa
-p = pygame.image.load("p.png")
-# Crea la ventana
-qwirkle = pygame.display.set_mode((1300,800))
 # Colores
 blanco = (255, 255, 255)
 negro = (0, 0, 0)
+# Crea la ventana
+garden = pygame.display.set_mode((1300,800))
 
 # Nombre de la ventana
 pygame.display.set_caption('Bees&Flowers by Sven&Rev')

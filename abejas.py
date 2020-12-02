@@ -13,35 +13,38 @@ Constaran de 20 bits
         se intetara evitar la combinacion del [1,1]
 
 """
-class Abejas:
+class Abeja:
 
     def __init__(self,dna):
         
         self.dna = dna
-        self.color(0,0,0)
-        self.pos(63,63)
+        self.color = (0,0,0)
+        self.pos = (63,63)
         #LA DIRECCION SE MANEJARAN POR INTEGERS PARA A LA HORA DE HACER EL RECORRIDO IDENTIFICARLO
-        self.direcccion = 0
+        self.direccion = 0
         #TIPO DE RECORRIDO: SE MANEJARAN CON INTEGERS ...""
         self.tipoRecorrido = 0
         self.distancia = 0
         self.anguloD = 0
+        self.cantidadFlores = 0
+        self.binnacle = ""
+        
         
 
-    def binaryToDecimal(binary): 
-          
-        binary1 = binary 
-        decimal, i, n = 0, 0, 0
-        while(binary != 0): 
-            dec = binary % 10
-            decimal = decimal + dec * pow(2, i) 
-            binary = binary//10
-            i += 1
+    def binaryListToDecimal(self,binary): 
+        decimal = 0
+        i = len(binary)-1
+        j = 0
+        while i >= 0:
+            if binary[i]:
+                decimal += 2**j
+            i = i - 1
+            j = j + 1
             
         return decimal
 
     
-    def decodeColor(dna):
+    def decodeColor(self):
 
         colorAbeja =[]
 
@@ -56,13 +59,12 @@ class Abejas:
 
         print(self.color)
 
-    def decodeInfo(dna):
+    def decodeInfo(self):
 
-        
-        self.direcccion = binaryToDecimal(dna[3:5])
-        self.anguloD = binaryToDecimal(dna[6:11])
-        self.distancia = binaryToDecimal(dna[12:17])
-        self.tipoRecorrido = binaryToDecimal(dna[18:20])
+        self.direcccion = self.binaryListToDecimal(self.dna[3:6])
+        self.anguloD = self.binaryListToDecimal(self.dna[6:12])
+        self.distancia = self.binaryListToDecimal(self.dna[12:18])
+        self.tipoRecorrido = self.binaryListToDecimal(self.dna[18:20])
         
         return
 
@@ -85,5 +87,20 @@ class Abejas:
             Y = -(i - 63)
 
         return (X, Y)
+
+    def printInfo(self):
+        print()
+        print("Cadena DNA: ",self.dna)
+        print("Color: ",self.color)
+        print("Direccion: ", self.direccion)
+        print("Distancia: ", self.distancia)
+        print("Angulo de Desviacion: ",self.anguloD)
+        print("Tipo de Recorrido: ",self.tipoRecorrido)
+        print("Cantidad de Flores Visitadas: ",self.cantidadFlores)
+        print()
+        return
+        
+        
+        
         
         
