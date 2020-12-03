@@ -23,6 +23,7 @@ class Flor:
         self.pos = (63, 63)
         self.index = (0, 0)
         self.polen = []
+        self.chromosome = []
 
 
     def decodePos():
@@ -67,6 +68,63 @@ class Flor:
 
         print(self.color)
 
+
+    def reproduce():
+
+        indexX = randint(0, len(self.polen)-1)
+        indexY = randint(0, len(self.polen)-1)
+
+        newDNA = []
+
+        if self.polen == []:
+
+            #Algoritmo usado para generar una flor totalmente random
+
+        else:
+
+            genX = self.polen[indexX]
+            genY = self.polen[indexY]
+
+            cut = randint(1, len(genX)-2)
+
+            for i in range (0, cut):
+
+                bit  = genX[i]
+                mutationValue = randint(1, 100)
+
+                if mutationValue < 25:
+
+                    bit = mutate(bit)
+
+                    newDNA.append(bit)
+
+            for i in range (cut+1, len(genY))
+
+                bit  = genY[i]
+                mutationValue = randint(1, 100)
+
+                if mutationValue < 25:
+
+                    bit = mutate(bit)
+
+                    newDNA.append(bit)
+
+            flower = Flor(newDNA)
+            flower.chromosome.append(genX)
+            flower.chromosome.append(genY)
+            
+            return flower
+
+            
+
+        
+    def mutate(bit):
+
+        if bit:
+            return 0
+        else:
+            return 1
+    
             
     def binaryToDecimal(binary): 
           

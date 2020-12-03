@@ -87,6 +87,17 @@ def genFlowerPoblation(maxPop):
     #for flor in poblacionFlores:
 
      #   print(flor.dna)
+
+"""
+Para crear una nueva generacion a partir de la anterior
+se recorre la lista de objetos, para cada uno se llama a la función que genera
+un nuevo individuo a partir de los genes recolectadosy lo retorna para agregarlo
+a una nueva lista de objetos
+
+El problema princípal con las flores es evitar que queden en la misma posicion
+
+Cruce, mutacion, nueva generación
+"""
           
 #PRIMERA GEN DE ABEJAS--------------------------------------
 
