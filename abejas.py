@@ -29,6 +29,7 @@ class Abeja:
         self.cantidadFlores = 0
         self.binnacle = ""
         self.polen = []
+        self.chromosome = []
         
         
 

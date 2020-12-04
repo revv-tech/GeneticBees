@@ -24,8 +24,10 @@ def decimalToBinary(n):
 
 #PRIMERA GEN DE FLORES
 
-def genFlowerPoblation(maxPop):
+def genFlowerPop(maxPop):
 
+    global poblacionFlores
+    
     flowersPos = []
 
     for i in range(0, maxPop):
@@ -88,6 +90,102 @@ def genFlowerPoblation(maxPop):
 
      #   print(flor.dna)
 
+
+def newFlowerGen():
+
+    global poblacionFlores
+
+    newGen = []
+
+    for flower in poblacionFlores:
+
+        newBorn = flower.reproduce
+        newGen.append(newBorn)
+
+    poblacionFlores = newGen
+
+
+def newBeeGen():
+
+    global poblacionAbejas
+
+    newGen = []
+
+    while len(poblacionAbejas) >= 2:
+
+        i = randint(0, len(poblacionAbejas)-1)
+        j = randint(0, len(poblacionAbejas)-1)
+
+        while j == i:
+
+            j = randint(0, len(poblacionAbejas)-1)
+
+        bee1 = poblacionAbejas[i]
+        bee2 = poblacionAbejas[j]
+
+        poblacionAbejas.remove(bee1)
+        poblacionAbejas.remove(bee2)
+
+        newBorns = crossBees(bee1, bee2)
+
+        for newBorn in newBorns:
+
+            newGen.append(newBorn)
+
+
+    poblacionAbejas = newGen
+
+
+def crossBees(bee1, bee2):
+
+    newBorns = []
+    gen1 = bee1.dna
+    gen2 = bee2.dna
+
+    rep = 0
+    while rep < 2:
+
+        newDna = []
+        cut = randint(1, len(gen1)-2)
+        
+        for i in range (0, cut):
+
+            bit  = gen1[i]
+            mutationValue = randint(1, 100)
+
+            if mutationValue < 25:
+
+                bit = mutate(bit)
+                
+            newDNA.append(bit)
+
+        for i in range (cut+1, len(gen2))
+
+            bit  = gen2[i]
+            mutationValue = randint(1, 100)
+
+            if mutationValue < 25:
+
+                bit = mutate(bit)
+
+            newDNA.append(bit)
+
+        bee = Abeja(newDNA)
+        flower.chromosome.append(gen1)
+        flower.chromosome.append(gen2)
+        newBorns.append(bee)
+        rep += 1
+            
+    return newBorns
+
+
+def mutate(bit):
+
+    if bit:
+        return 0
+    else:
+        return 1    
+        
 """
 Para crear una nueva generacion a partir de la anterior
 se recorre la lista de objetos, para cada uno se llama a la función que genera

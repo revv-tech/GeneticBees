@@ -81,6 +81,7 @@ class Flor:
         if self.polen == []:
 
             #Algoritmo usado para generar una flor totalmente random
+            print("Flor random generada")
 
         else:
 
