@@ -135,8 +135,9 @@ def genAbejasGenerator(n):
     return
     """
 
-    
-        
+#E: Dos Ints
+#S: Una lista de bits
+#D: Crea una lista con el numero en binario convertido
 def transBinaryFormat(data,rangeBits):
     
     bitChain = decimalToBinary(data)
@@ -151,7 +152,9 @@ def transBinaryFormat(data,rangeBits):
         dnaChain.append(int(bit))
     
     return dnaChain
-                
+
+
+          
 
 #GUI
 """

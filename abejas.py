@@ -28,6 +28,7 @@ class Abeja:
         self.anguloD = 0
         self.cantidadFlores = 0
         self.binnacle = ""
+        self.polen = []
         
         
 
@@ -99,6 +100,7 @@ class Abeja:
         print("Cantidad de Flores Visitadas: ",self.cantidadFlores)
         print()
         return
+    
         
         
         

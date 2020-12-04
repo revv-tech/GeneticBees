@@ -14,6 +14,7 @@
 # y los siguientes 3 bits son del color
 # Estos estarán en el DNA
 #[1,0,1,0,1,0,1,1,0,1,0,1,0,1,0,1,0]
+
 class Flor:
     
     def __init__(self, dna):
@@ -24,6 +25,7 @@ class Flor:
         self.index = (0, 0)
         self.polen = []
         self.chromosome = []
+        self.bitacora = ""
 
 
     def decodePos():
@@ -115,7 +117,6 @@ class Flor:
             
             return flower
 
-            
 
         
     def mutate(bit):
