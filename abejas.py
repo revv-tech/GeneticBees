@@ -1,5 +1,5 @@
 #ABEJAS
-
+import math
 """
 Estructura del DNA
 
@@ -49,20 +49,22 @@ class Abeja:
     def decodeColor(self):
 
         colorAbeja =[]
-
+        
         for i in range(0,3):
-            colorAbeja.append(dna[i])
+            colorAbeja.append(self.dna[i])
             
         for i in range(0, len(colorAbeja)):
 
             if colorAbeja[i]:
 
-                self.color[i] = 255
+                colorAbeja[i] = 255
+        self.color = tuple(colorAbeja)
 
         print(self.color)
 
     def decodeInfo(self):
 
+        self.decodeColor()
         self.direcccion = self.binaryListToDecimal(self.dna[3:6])
         self.anguloD = self.binaryListToDecimal(self.dna[6:12])
         self.distancia = self.binaryListToDecimal(self.dna[12:18])
@@ -102,8 +104,50 @@ class Abeja:
         print()
         return
     
+    def busquedaFlores(self,listaFlores):    
+
+        point = [round(math.cos(math.radians(self.anguloD))* math.sqrt(distancia)),round(math.sin(math.radians(self.anguloD))* math.sqrt(distancia))]
+
+        thirdPoint = getNearerSide(point)
+
         
         
+        return
+
+    def getNearerSide(self,point):
+        if 90 - self.anguloD <= 45:
+            return (point[0],0)
+        else:
+            return (0,point[1])
         
+    def transformPoint(self,point):
+
+        #NORTE
+        if self.direccion == 0:
+            return
+        #SUR
+        elif self.direccion == 4:
+            return
+        #ESTE
+        elif self.direccion == 2:
+            return
+        #OESTE
+        elif self.direccion == 6:
+            return
+        #SURESTE
+        elif self.direccion == 3:
+            return [point[0]] + [point[1] * -1]
+        #SUROESTE
+        elif self.direccion == 5:
+            return [point[0] * -1 ] + [point[1] * -1]
+        #NOROESTE
+        elif self.direccion == 7:
+            return [point[0] * -1 ] + [point[1]]
+        #NORESTE
+        else:
+            return point
+        
+        
+    
         
         

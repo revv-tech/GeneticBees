@@ -129,7 +129,7 @@ def newBeeGen():
         newBorns = crossBees(bee1, bee2)
 
         for newBorn in newBorns:
-
+            
             newGen.append(newBorn)
 
 
@@ -159,7 +159,7 @@ def crossBees(bee1, bee2):
                 
             newDNA.append(bit)
 
-        for i in range (cut+1, len(gen2))
+        for i in range (cut+1, len(gen2)):
 
             bit  = gen2[i]
             mutationValue = randint(1, 100)
@@ -171,6 +171,7 @@ def crossBees(bee1, bee2):
             newDNA.append(bit)
 
         bee = Abeja(newDNA)
+        bee.decodeInfo()
         flower.chromosome.append(gen1)
         flower.chromosome.append(gen2)
         newBorns.append(bee)
@@ -217,21 +218,14 @@ def genAbejasGenerator(n):
         newTipo = randint(0, 3)
         #ANGULO DESVIACION (PROVISIONAL)
         newAngulo = randint(0,31)
+        #
         #DNA ABEJA
         newBeeDNA = transBinaryFormat(newColor,3) + transBinaryFormat(newDir,3) + transBinaryFormat(newAngulo,6) + transBinaryFormat(newDist,6) + transBinaryFormat(newTipo,2)
         #NUEVA ABEJA
         newBee = Abeja(newBeeDNA)
+        newBee.decodeInfo()
+        newBee.printInfo()
         poblacionAbejas.append(newBee)
-    """  
-    for j in range(0,len(poblacionAbejas)):
-        print()
-        print("Abeja #",j)
-        poblacionAbejas[j].decodeInfo()
-        poblacionAbejas[j].printInfo()
-        print()
-
-    return
-    """
 
 #E: Dos Ints
 #S: Una lista de bits

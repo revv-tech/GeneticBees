@@ -101,7 +101,7 @@ class Flor:
 
                     newDNA.append(bit)
 
-            for i in range (cut+1, len(genY))
+            for i in range (cut+1, len(genY)):
 
                 bit  = genY[i]
                 mutationValue = randint(1, 100)
