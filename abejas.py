@@ -58,9 +58,10 @@ class Abeja:
             if colorAbeja[i]:
 
                 colorAbeja[i] = 255
+                
         self.color = tuple(colorAbeja)
 
-        print(self.color)
+        #print(self.color)
 
     def decodeInfo(self):
 
@@ -110,13 +111,24 @@ class Abeja:
 
         thirdPoint = getNearerSide(point)
 
+        for flor in listaFlores:
+
+            if flor.pos 
+            
+            
+
         
         
         return
 
+    def pointInRange(p1,p2):
+        
+        return
     def getNearerSide(self,point):
+
         if 90 - self.anguloD <= 45:
             return (point[0],0)
+        
         else:
             return (0,point[1])
         
