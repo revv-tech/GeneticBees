@@ -39,13 +39,12 @@ def genFlowerPop(maxPop):
         i = randint(0, 127)
         j = randint(0, 127)
         pos = (i, j)
-        
         while pos in flowersPos:
 
             i = randint(0, 127)
             j = randint(0, 127)
             pos = (i, j)
-
+        
         flowersPos.append(pos)
         
         genI = decimalToBinary(i)
@@ -137,7 +136,7 @@ def newBeeGen():
 
 
 def crossBees(bee1, bee2):
-
+    #HAY UNA EXCEPCION EN UNA COMBINACION QUE PUEDE DAR MAS COMBINACIONES (REVISAR)
     newBorns = []
     gen1 = bee1.dna
     gen2 = bee2.dna
@@ -211,20 +210,22 @@ def genAbejasGenerator(n):
         #COLOR
         newColor = randint(0, 7)
         #DIRECCION
-        newDir = randint(0, 7)
+        newDir = randint(0, 511)
         #DISTANCIA
         newDist = randint(0, 63)
         #TIPO
         newTipo = randint(0, 3)
-        #ANGULO DESVIACION (PROVISIONAL)
+        #ANGULO DESVIACION
         newAngulo = randint(0,31)
-        #
-        #DNA ABEJA
-        newBeeDNA = transBinaryFormat(newColor,3) + transBinaryFormat(newDir,3) + transBinaryFormat(newAngulo,6) + transBinaryFormat(newDist,6) + transBinaryFormat(newTipo,2)
+        
+        
+        newBeeDNA = transBinaryFormat(newColor,3) + transBinaryFormat(newDir,9) + transBinaryFormat(newAngulo,6) + transBinaryFormat(newDist,6) + transBinaryFormat(newTipo,2)
+        
         #NUEVA ABEJA
         newBee = Abeja(newBeeDNA)
         newBee.decodeInfo()
         newBee.printInfo()
+        newBee.busquedaFlores([])
         poblacionAbejas.append(newBee)
 
 #E: Dos Ints

@@ -3,10 +3,10 @@ import math
 """
 Estructura del DNA
 
-Constaran de 20 bits
+Constaran de 26 bits
 
 0-1-2: COLOR -> Color en RGB
-3-4-5: DIRECCION -> Punto Cardinal
+3-4-5-6-7-8-9-10-11: DIRECCION -> Punto Cardinal
 6...11: Angulo -> Por ahora lo tendremos en 31 para tener 3 bits
 12...17: Distancia -> El maximo es 63 por lo que se utilizan 6 bits
 18..20: Tipo de Recorrido -> Hay tres tipos de recorridos. Se reservaron 4 combinaciones porque no se pueden de guardar 3, a la hora de hacer el cruce, crear la primera poblacion,...
@@ -42,7 +42,7 @@ class Abeja:
                 decimal += 2**j
             i = i - 1
             j = j + 1
-            
+        
         return decimal
 
     
@@ -66,14 +66,20 @@ class Abeja:
     def decodeInfo(self):
 
         self.decodeColor()
-        self.direcccion = self.binaryListToDecimal(self.dna[3:6])
-        self.anguloD = self.binaryListToDecimal(self.dna[6:12])
-        self.distancia = self.binaryListToDecimal(self.dna[12:18])
-        self.tipoRecorrido = self.binaryListToDecimal(self.dna[18:20])
+        self.direccion = self.get360range(self.binaryListToDecimal(self.dna[3:12]))
+        self.anguloD = self.binaryListToDecimal(self.dna[12:18])
+        self.distancia = self.binaryListToDecimal(self.dna[18:24])
+        self.tipoRecorrido = self.binaryListToDecimal(self.dna[24:26])
         
         return
-
-    def indexToAxis(i, j):
+    
+    def get360range(self,n):
+        if n <= 360:
+            return n
+        else:
+            return self.get360range(n-360)
+        
+    def indexToAxis(self,i, j):
 
         if i < 64:
 
@@ -107,57 +113,71 @@ class Abeja:
     
     def busquedaFlores(self,listaFlores):    
 
-        point = [round(math.cos(math.radians(self.anguloD))* math.sqrt(distancia)),round(math.sin(math.radians(self.anguloD))* math.sqrt(distancia))]
+        availableFlowerList = []
 
-        thirdPoint = getNearerSide(point)
+        #PUNTOS QUE FORMAN EL RANGO DE BUSQUEDA
+        
+        pointPrincipal = (round(math.cos(math.radians(self.direccion))* math.sqrt(self.distancia)),round(math.sin(math.radians(self.direccion))* math.sqrt(self.distancia)))
 
+        secondPoint = (round(math.cos(math.radians(self.direccion + self.anguloD))* math.sqrt(self.distancia)),round(math.sin(math.radians(self.direccion + self.anguloD))* math.sqrt(self.distancia)))
+
+        thirdPoint = (round(math.cos(math.radians(self.direccion - self.anguloD))* math.sqrt(self.distancia)),round(math.sin(math.radians(self.direccion - self.anguloD))* math.sqrt(self.distancia)))
+
+        
+
+        #CHECKEA SI LA FLOR DE LA LISTA PERTENECE O NO AL TRIANGULO QUE FORMAN LOS PUNTOS DE ACUERDO AL PLANO
         for flor in listaFlores:
 
-            if flor.pos 
-            
-            
+            location = flor.pos
 
+            if self.isPointIn((0,0),secondPoint,thirdPoint,location):
+
+                availableFlowerList.append(flower)
+        
+        #BUSQUEDA DE FLOR
         
         
         return
+    
+    def isPointIn(self,p1,p2,p3,puntoBusqueda):
+        x1 = p1[0]
+        y1 = p1[1]
+        x2 = p2[0]
+        y2 = p2[1]
+        x3 = p3[0]
+        y3 = p3[1]
+        x  = puntoBusqueda[0]
+        y  = puntoBusqueda[1]
+          
+        # Calculate area of triangle ABC 
+        A = self.area (x1, y1, x2, y2, x3, y3) 
+  
+        # Calculate area of triangle PBC  
+        A1 = self.area (x, y, x2, y2, x3, y3) 
+      
+        # Calculate area of triangle PAC  
+        A2 = self.area (x1, y1, x, y, x3, y3) 
+      
+        # Calculate area of triangle PAB  
+        A3 = self.area (x1, y1, x2, y2, x, y) 
+      
+        # Check if sum of A1, A2 and A3  
+        # is same as A 
+        if(A == A1 + A2 + A3): 
+            return True
+        else: 
+            return False
+    
+    def area(self,x1, y1, x2, y2, x3, y3): 
+  
+        return abs((x1 * (y2 - y3) + x2 * (y3 - y1)  + x3 * (y1 - y2)) / 2.0)
 
-    def pointInRange(p1,p2):
-        
+    def generateFlowerTree(flowerList,tipoRecorrido):
         return
-    def getNearerSide(self,point):
-
-        if 90 - self.anguloD <= 45:
-            return (point[0],0)
         
-        else:
-            return (0,point[1])
-        
-    def transformPoint(self,point):
+    
 
-        #NORTE
-        if self.direccion == 0:
-            return
-        #SUR
-        elif self.direccion == 4:
-            return
-        #ESTE
-        elif self.direccion == 2:
-            return
-        #OESTE
-        elif self.direccion == 6:
-            return
-        #SURESTE
-        elif self.direccion == 3:
-            return [point[0]] + [point[1] * -1]
-        #SUROESTE
-        elif self.direccion == 5:
-            return [point[0] * -1 ] + [point[1] * -1]
-        #NOROESTE
-        elif self.direccion == 7:
-            return [point[0] * -1 ] + [point[1]]
-        #NORESTE
-        else:
-            return point
+            
         
         
     
