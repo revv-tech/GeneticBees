@@ -6,10 +6,10 @@ Estructura del DNA
 Constaran de 26 bits
 
 0-1-2: COLOR -> Color en RGB
-3-4-5-6-7-8-9-10-11: DIRECCION -> Punto Cardinal
-6...11: Angulo -> Por ahora lo tendremos en 31 para tener 3 bits
-12...17: Distancia -> El maximo es 63 por lo que se utilizan 6 bits
-18..20: Tipo de Recorrido -> Hay tres tipos de recorridos. Se reservaron 4 combinaciones porque no se pueden de guardar 3, a la hora de hacer el cruce, crear la primera poblacion,...
+3...12: DIRECCION -> Punto Cardinal
+13...16: ANGULO -> Por ahora lo tendremos en 31 para tener 3 bits
+17...23: DISTANCIA -> El maximo es 63 por lo que se utilizan 6 bits
+24...26: TIPO DE RECORRIDO -> Hay tres tipos de recorridos. Se reservaron 4 combinaciones porque no se pueden de guardar 3, a la hora de hacer el cruce, crear la primera poblacion,...
         se intetara evitar la combinacion del [1,1]
 
 """
@@ -27,16 +27,18 @@ class Abeja:
         self.distancia = 0
         self.anguloD = 0
         self.cantidadFlores = 0
-        self.binnacle = ""
+        self.bitacora = ""
         self.polen = []
         self.chromosome = []
         
         
 
     def binaryListToDecimal(self,binary): 
+
         decimal = 0
         i = len(binary)-1
         j = 0
+        
         while i >= 0:
             if binary[i]:
                 decimal += 2**j
@@ -87,15 +89,15 @@ class Abeja:
 
         else:
 
-            X = i - 64
+            X = i - 63
 
         if j < 64:
 
-            Y = 63 - j
+            Y = -(63 - j)
 
         else:
 
-            Y = -(i - 63)
+            Y = j - 63
 
         return (X, Y)
 
@@ -117,13 +119,11 @@ class Abeja:
 
         #PUNTOS QUE FORMAN EL RANGO DE BUSQUEDA
         
-        pointPrincipal = (round(math.cos(math.radians(self.direccion))* math.sqrt(self.distancia)),round(math.sin(math.radians(self.direccion))* math.sqrt(self.distancia)))
+        #pointPrincipal = (round(math.cos(math.radians(self.direccion))* self.distancia),round(math.sin(math.radians(self.direccion))* self.distancia))
 
-        secondPoint = (round(math.cos(math.radians(self.direccion + self.anguloD))* math.sqrt(self.distancia)),round(math.sin(math.radians(self.direccion + self.anguloD))* math.sqrt(self.distancia)))
+        secondPoint = (round(math.cos(math.radians(self.direccion + self.anguloD))* self.distancia),round(math.sin(math.radians(self.direccion + self.anguloD))* self.distancia))
 
-        thirdPoint = (round(math.cos(math.radians(self.direccion - self.anguloD))* math.sqrt(self.distancia)),round(math.sin(math.radians(self.direccion - self.anguloD))* math.sqrt(self.distancia)))
-
-        
+        thirdPoint = (round(math.cos(math.radians(self.direccion - self.anguloD))* self.distancia),round(math.sin(math.radians(self.direccion - self.anguloD))* self.distancia))
 
         #CHECKEA SI LA FLOR DE LA LISTA PERTENECE O NO AL TRIANGULO QUE FORMAN LOS PUNTOS DE ACUERDO AL PLANO
         for flor in listaFlores:
@@ -135,7 +135,10 @@ class Abeja:
                 availableFlowerList.append(flower)
         
         #BUSQUEDA DE FLOR
-        
+        for available in availableFlowerList:
+
+            self.getFlower(available)
+            
         
         return
     
@@ -172,8 +175,72 @@ class Abeja:
   
         return abs((x1 * (y2 - y3) + x2 * (y3 - y1)  + x3 * (y1 - y2)) / 2.0)
 
-    def generateFlowerTree(flowerList,tipoRecorrido):
+    def generateFlowerTree(self,flowerList,tipoRecorrido):
         return
+
+    #AGREGA LOS DATOS DE LA FLOR
+    def getFlower(self,flower):
+
+        if flower.color == self.color:
+
+            #SUMA UNA FLOR
+            self.cantidadFlores = self.cantidadFlores + 1
+
+            #AGREGA EL POLEN
+            self.polen.append(flower.dna)
+
+            #AGREGAR A LA FLOR TODA POLEN DE LA ABEJA
+
+            flower.addPolen(self.polen)
+
+            return
+        
+        else:
+            
+            prob = randint(0, 100)
+
+            if prob > 40:
+                
+                #SUMA UNA FLOR
+                self.cantidadFlores = self.cantidadFlores + 1
+
+                #AGREGA EL POLEN
+                self.polen.append(flower.dna)
+                
+                #AGREGAR A LA FLOR TODA POLEN DE LA ABEJA
+                flower.addPolen(self.polen)
+                
+            else:
+                return
+
+    def recorrido(self,flores):
+
+        if self.tipoRecorrido == 3:
+
+            return flores
+        
+        elif self.tipoRecorrido == 2:
+
+            #RECORRIDO POR ALTURA: SE ORDENA LA LISTA CON EL Y MAS CERCANO AL EJE X
+
+            flores.sort(key = lambda y: y.pos[1])
+            
+            return flores
+
+        elif self.tipoRecorrido == 1:
+
+            #RECORRIDO POR ANCHURA: SE ORDENA LA LISTA CON EL X MENOR`
+            
+            return
+        
+    
+        
+    
+    
+                
+
+            
+            
         
     
 

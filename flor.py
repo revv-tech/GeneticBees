@@ -26,9 +26,10 @@ class Flor:
         self.polen = []
         self.chromosome = []
         self.bitacora = ""
+        self.cantidadAbejas = 0
 
 
-    def decodePos():
+    def decodePos(self):
 
         genPosI = []
         genPosJ = []
@@ -54,7 +55,7 @@ class Flor:
             
 
     
-    def decodeColor():
+    def decodeColor(self):
 
         genColor = []
 
@@ -148,18 +149,32 @@ class Flor:
 
         else:
 
-            X = i - 64
+            X = i - 63
 
         if j < 64:
 
-            Y = 63 - j
+            Y = -(63 - j)
 
         else:
 
-            Y = -(i - 63)
+            Y = j - 63
 
         return (X, Y)
+
+    def addPolen(self,listPolen):
+
+        if listPolen == []:
+            return
+        else:
+            
+            self.polen.append(listPolen[0])
+            
+            return addPolen(self,listPolen[1:])
         
+    def decodeFullInfo(self):
+        self.decodePos()
+        self.decodeColor()
+        return
 
         
 

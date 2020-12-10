@@ -39,6 +39,7 @@ def genFlowerPop(maxPop):
         i = randint(0, 127)
         j = randint(0, 127)
         pos = (i, j)
+        print(pos)
         while pos in flowersPos:
 
             i = randint(0, 127)
@@ -82,6 +83,7 @@ def genFlowerPop(maxPop):
             dna.append(int(bit))
 
         newFlower = Flor(dna)
+        #newFlower.decodeFullInfo()
         poblacionFlores.append(newFlower)
 
 
@@ -136,7 +138,7 @@ def newBeeGen():
 
 
 def crossBees(bee1, bee2):
-    #HAY UNA EXCEPCION EN UNA COMBINACION QUE PUEDE DAR MAS COMBINACIONES (REVISAR)
+    #HAY UNA EXCEPCION EN UNA COMBINACION QUE PUEDE DAR MAS COMBINACIONES EN LOS ULTIMOS DOS BITS SE NECESITAN 3 CAMBINACIONES PERO SOLO SE PUEDEN HACER 4 DE ACUERDO A LOS NUMEROS EN BIANRIO(REVISAR)
     newBorns = []
     gen1 = bee1.dna
     gen2 = bee2.dna
