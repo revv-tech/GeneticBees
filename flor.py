@@ -28,51 +28,48 @@ class Flor:
         self.bitacora = ""
         self.cantidadAbejas = 0
 
+    def binaryListToDecimal(self,binary): 
 
+        decimal = 0
+        i = len(binary)-1
+        j = 0
+        
+        while i >= 0:
+            if binary[i]:
+                decimal += 2**j
+            i = i - 1
+            j = j + 1
+        
+        return decimal
+    
     def decodePos(self):
 
-        genPosI = []
-        genPosJ = []
+        I = self.binaryListToDecimal(self.dna[0:6])
+        J = self.binaryListToDecimal(self.dna[7:14])
 
-        for i in range (0, 7):
+        self.index = (I,J)
 
-            genPosI += self.dna[i]
-
-        for i in range (7, 14):
-
-            genPosJ += self.dna[i]
-
-        binI = int(''.join(map(str,genPosI)))
-        binJ = int(''.join(map(str,genPosj)))
-
-        I = binaryToDecimal(binX)
-        J = binaryToDecimal(binY)
-
-        self.index[0] = I
-        self.index[1] = J
-
-        self.pos = indexToAxis(I, J)
+        self.pos = self.indexToAxis(I, J)
             
-
+    
     
     def decodeColor(self):
 
-        genColor = []
+        colorAbeja =[]
+        
+        for i in range(0,3):
+            colorAbeja.append(self.dna[i])
+            
+        for i in range(0, len(colorAbeja)):
 
-        for i in range(14, 17):
+            if colorAbeja[i]:
 
-            genColor.append(self.dna[i])
-
-        for i in range(0, len(genColor)):
-
-            if genColor[i]:
-
-                self.color[i] = 255
-
-        print(self.color)
+                colorAbeja[i] = 255
+                
+        self.color = tuple(colorAbeja)
 
 
-    def reproduce():
+    def reproduce(self):
 
         indexX = randint(0, len(self.polen)-1)
         indexY = randint(0, len(self.polen)-1)
@@ -121,7 +118,7 @@ class Flor:
 
 
         
-    def mutate(bit):
+    def mutate(self,bit):
 
         if bit:
             return 0
@@ -129,7 +126,7 @@ class Flor:
             return 1
     
             
-    def binaryToDecimal(binary): 
+    def binaryToDecimal(self,binary): 
           
         binary1 = binary 
         decimal, i, n = 0, 0, 0
@@ -141,7 +138,7 @@ class Flor:
         return decimal
 
 
-    def indexToAxis(i, j):
+    def indexToAxis(self,i, j):
 
         if i < 64:
 
@@ -173,7 +170,7 @@ class Flor:
         
     def decodeFullInfo(self):
         self.decodePos()
-        self.decodeColor()
+        #self.decodeColor()
         return
 
         

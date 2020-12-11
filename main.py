@@ -39,7 +39,8 @@ def genFlowerPop(maxPop):
         i = randint(0, 127)
         j = randint(0, 127)
         pos = (i, j)
-        print(pos)
+
+        #print(pos)
         while pos in flowersPos:
 
             i = randint(0, 127)
@@ -252,7 +253,8 @@ def transBinaryFormat(data,rangeBits):
           
 
 #GUI
-"""
+# BK
+bg = pygame.image.load('grass.png')
 # IMAGENES
 # Colores
 blanco = (255, 255, 255)
@@ -268,4 +270,38 @@ reloj = pygame.time.Clock()
 font = pygame.font.SysFont("Minecraft", 20)
 font2 = pygame.font.SysFont("Minecraft", 40)
 font3 = pygame.font.SysFont("Minecraft", 10)
-"""
+
+#MOSTRAR IMAGENES DE FLORES
+def showFlowers():
+
+    for flower in poblacionFlores:
+        name = str(flower.color) + ".png"
+        image = pygame.image.load(name)
+        flower.decodeColor()
+        flower.decodePos()
+        pos = flower.index
+        
+        imageSetter(pos[0],pos[1],image)
+        
+# ACOMODAR IMAGENES
+def imageSetter(x, y, name):
+    garden.blit(name, (x, y))
+
+def gui():
+    loop = True
+    genFlowerPop(150)
+
+    while loop:
+        
+        garden.blit(bg, (0, 0))
+        showFlowers()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+            #if event.type == pygame.KEYDOWN:
+        
+        pygame.display.update()
+
+gui()
+    

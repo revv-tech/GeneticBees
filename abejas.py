@@ -30,6 +30,7 @@ class Abeja:
         self.bitacora = ""
         self.polen = []
         self.chromosome = []
+        self.distanciaRecorrida = 0
         
         
 
