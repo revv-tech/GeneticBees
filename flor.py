@@ -55,18 +55,18 @@ class Flor:
     
     def decodeColor(self):
 
-        colorAbeja =[]
+        colorFlor =[]
         
-        for i in range(0,3):
-            colorAbeja.append(self.dna[i])
+        for i in range(14,17):
+            colorFlor.append(self.dna[i])
             
-        for i in range(0, len(colorAbeja)):
+        for i in range(0, len(colorFlor)):
 
-            if colorAbeja[i]:
+            if colorFlor[i]:
 
-                colorAbeja[i] = 255
+                colorFlor[i] = 255
                 
-        self.color = tuple(colorAbeja)
+        self.color = tuple(colorFlor)
 
 
     def reproduce(self):

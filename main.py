@@ -289,7 +289,7 @@ def imageSetter(x, y, name):
 
 def gui():
     loop = True
-    genFlowerPop(150)
+    genFlowerPop(1000)
 
     while loop:
         
