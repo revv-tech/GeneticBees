@@ -260,7 +260,7 @@ bg = pygame.image.load('grass.png')
 blanco = (255, 255, 255)
 negro = (0, 0, 0)
 # Crea la ventana
-garden = pygame.display.set_mode((1300,800))
+garden = pygame.display.set_mode((1270,950))
 
 # Nombre de la ventana
 pygame.display.set_caption('Bees&Flowers by Sven&Rev')
@@ -270,6 +270,7 @@ reloj = pygame.time.Clock()
 font = pygame.font.SysFont("Minecraft", 20)
 font2 = pygame.font.SysFont("Minecraft", 40)
 font3 = pygame.font.SysFont("Minecraft", 10)
+panal = pygame.image.load("panal.png")
 
 #MOSTRAR IMAGENES DE FLORES
 def showFlowers():
@@ -280,8 +281,9 @@ def showFlowers():
         flower.decodeColor()
         flower.decodePos()
         pos = flower.index
-        
-        imageSetter(pos[0],pos[1],image)
+        #print(str(flower.color))
+        imageSetter((pos[0]*10)*2,abs(pos[1]*10),image)
+    return
         
 # ACOMODAR IMAGENES
 def imageSetter(x, y, name):
@@ -289,19 +291,22 @@ def imageSetter(x, y, name):
 
 def gui():
     loop = True
+    global poblacionFlores
     genFlowerPop(1000)
-
     while loop:
         
         garden.blit(bg, (0, 0))
         showFlowers()
+        imageSetter(620,455,panal)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
             #if event.type == pygame.KEYDOWN:
-        
+
         pygame.display.update()
+        reloj.tick(1)
+        
 
 gui()
     
