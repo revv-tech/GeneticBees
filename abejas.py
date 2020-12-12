@@ -134,7 +134,10 @@ class Abeja:
             if self.isPointIn((0,0),secondPoint,thirdPoint,location):
 
                 availableFlowerList.append(flower)
-        
+        #TIPO DE RECORRIDO
+        availableFlowerList = self.recorrido(availableFlowerList)
+        #GET DISTANCIA
+        self.distanciaRecorrida = getDistanceTraveled(listaFlores)
         #BUSQUEDA DE FLOR
         for available in availableFlowerList:
 
@@ -143,6 +146,27 @@ class Abeja:
         
         return
     
+    def getDistanceTraveled(listaFlores):
+        
+        n1 = (listaFlores[0].pos[0]-self.pos[0]) * (self.pos[0]-listaFlores[0].pos[0])
+        n2 = (listaFlores[0].pos[1]-self.pos[1]) * (self.pos[1]-listaFlores[0].pos[1])
+        totalD = math.sqrt(n1+n2)
+
+        for i in range(0,len(listaFlores)):
+
+            j = i + 1
+
+            if j == len(len(listaFlores)):
+                return totalD
+            else:
+                n1 = (listaFlores[i].pos[0]-listaFlores[j].pos[0]) * (listaFlores[j].pos[0]-listaFlores[i].pos[0])
+                n2 = (listaFlores[0].pos[i]-listaFlores[0].pos[j]) * (listaFlores[0].pos[i]-listaFlores[0].pos[j])
+                totalD = totalD + math.sqrt(n1+n2)
+                
+        return totalD
+
+            
+        
     def isPointIn(self,p1,p2,p3,puntoBusqueda):
         x1 = p1[0]
         y1 = p1[1]
@@ -230,9 +254,10 @@ class Abeja:
 
         elif self.tipoRecorrido == 1:
 
-            #RECORRIDO POR ANCHURA: SE ORDENA LA LISTA CON EL X MENOR`
+            #RECORRIDO POR ANCHURA: SE ORDENA LA LISTA CON EL X MENOR
+            flores.sort(key = lambda X: X.pos[0])
             
-            return
+            return flores
         
     
         
