@@ -1,5 +1,6 @@
 #ABEJAS
 import math
+import random
 """
 Estructura del DNA
 
@@ -111,60 +112,74 @@ class Abeja:
         print("Angulo de Desviacion: ",self.anguloD)
         print("Tipo de Recorrido: ",self.tipoRecorrido)
         print("Cantidad de Flores Visitadas: ",self.cantidadFlores)
+        print("Distancia Recorrida: ",self.distanciaRecorrida)
         print()
         return
     
-    def busquedaFlores(self,listaFlores):    
+    def busquedaFlores(self,listaFlores):
 
+        print("================================== ABEJA ==================================")
+        self.printInfo()
         availableFlowerList = []
 
         #PUNTOS QUE FORMAN EL RANGO DE BUSQUEDA
         
         #pointPrincipal = (round(math.cos(math.radians(self.direccion))* self.distancia),round(math.sin(math.radians(self.direccion))* self.distancia))
+        
 
         secondPoint = (round(math.cos(math.radians(self.direccion + self.anguloD))* self.distancia),round(math.sin(math.radians(self.direccion + self.anguloD))* self.distancia))
 
         thirdPoint = (round(math.cos(math.radians(self.direccion - self.anguloD))* self.distancia),round(math.sin(math.radians(self.direccion - self.anguloD))* self.distancia))
 
+        print("Area: ",secondPoint,thirdPoint)
+
         #CHECKEA SI LA FLOR DE LA LISTA PERTENECE O NO AL TRIANGULO QUE FORMAN LOS PUNTOS DE ACUERDO AL PLANO
         for flor in listaFlores:
 
             location = flor.pos
+            
 
             if self.isPointIn((0,0),secondPoint,thirdPoint,location):
-
-                availableFlowerList.append(flower)
+                flor.printInfo()
+                availableFlowerList.append(flor)
         #TIPO DE RECORRIDO
         availableFlowerList = self.recorrido(availableFlowerList)
         #GET DISTANCIA
-        self.distanciaRecorrida = getDistanceTraveled(listaFlores)
+        self.distanciaRecorrida = self.getDistanceTraveled(availableFlowerList)
         #BUSQUEDA DE FLOR
         for available in availableFlowerList:
 
             self.getFlower(available)
             
-        
+        self.printInfo()
         return
     
-    def getDistanceTraveled(listaFlores):
+    def getDistanceTraveled(self,listaFlores):
         
-        n1 = (listaFlores[0].pos[0]-self.pos[0]) * (self.pos[0]-listaFlores[0].pos[0])
-        n2 = (listaFlores[0].pos[1]-self.pos[1]) * (self.pos[1]-listaFlores[0].pos[1])
-        totalD = math.sqrt(n1+n2)
+        
+        if listaFlores == []:
+
+            return 0 
+        
+
+        totalD = 0
 
         for i in range(0,len(listaFlores)):
 
             j = i + 1
 
-            if j == len(len(listaFlores)):
+            if j == len(listaFlores):
+                print(totalD)
                 return totalD
             else:
-                n1 = (listaFlores[i].pos[0]-listaFlores[j].pos[0]) * (listaFlores[j].pos[0]-listaFlores[i].pos[0])
-                n2 = (listaFlores[0].pos[i]-listaFlores[0].pos[j]) * (listaFlores[0].pos[i]-listaFlores[0].pos[j])
-                totalD = totalD + math.sqrt(n1+n2)
+                
+                totalD = totalD + self.distancePoints((listaFlores[i].pos,listaFlores[j].pos))
                 
         return totalD
-
+    
+    def distancePoints(self,points):
+       p0, p1 = points
+       return math.sqrt((p0[0] - p1[0])**2 + (p0[1] - p1[1])**2)
             
         
     def isPointIn(self,p1,p2,p3,puntoBusqueda):
@@ -200,8 +215,6 @@ class Abeja:
   
         return abs((x1 * (y2 - y3) + x2 * (y3 - y1)  + x3 * (y1 - y2)) / 2.0)
 
-    def generateFlowerTree(self,flowerList,tipoRecorrido):
-        return
 
     #AGREGA LOS DATOS DE LA FLOR
     def getFlower(self,flower):
@@ -222,7 +235,7 @@ class Abeja:
         
         else:
             
-            prob = randint(0, 100)
+            prob = random.randint(0, 100)
 
             if prob > 40:
                 
@@ -240,11 +253,11 @@ class Abeja:
 
     def recorrido(self,flores):
 
-        if self.tipoRecorrido == 3:
+        if self.tipoRecorrido == 2 or self.tipoRecorrido == 3:
 
             return flores
         
-        elif self.tipoRecorrido == 2:
+        elif self.tipoRecorrido == 1:
 
             #RECORRIDO POR ALTURA: SE ORDENA LA LISTA CON EL Y MAS CERCANO AL EJE X
 
@@ -252,7 +265,7 @@ class Abeja:
             
             return flores
 
-        elif self.tipoRecorrido == 1:
+        elif self.tipoRecorrido == 0:
 
             #RECORRIDO POR ANCHURA: SE ORDENA LA LISTA CON EL X MENOR
             flores.sort(key = lambda X: X.pos[0])

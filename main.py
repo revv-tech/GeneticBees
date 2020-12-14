@@ -84,7 +84,7 @@ def genFlowerPop(maxPop):
             dna.append(int(bit))
 
         newFlower = Flor(dna)
-        #newFlower.decodeFullInfo()
+        newFlower.decodeFullInfo()
         poblacionFlores.append(newFlower)
 
 
@@ -221,14 +221,14 @@ def genAbejasGenerator(n):
         #ANGULO DESVIACION
         newAngulo = randint(0,31)
         
-        
+        #MERGE DNA
         newBeeDNA = transBinaryFormat(newColor,3) + transBinaryFormat(newDir,9) + transBinaryFormat(newAngulo,6) + transBinaryFormat(newDist,6) + transBinaryFormat(newTipo,2)
         
         #NUEVA ABEJA
         newBee = Abeja(newBeeDNA)
         newBee.decodeInfo()
-        newBee.printInfo()
-        newBee.busquedaFlores([])
+        #newBee.printInfo()
+        #newBee.busquedaFlores(poblacionFlores)
         poblacionAbejas.append(newBee)
 
 #E: Dos Ints
@@ -290,13 +290,15 @@ def imageSetter(x, y, name):
     garden.blit(name, (x, y))
 
 def gui():
+    
     loop = True
     global poblacionFlores
+    
     genFlowerPop(1000)
+    genAbejasGenerator(1000)
     while loop:
-        
         garden.blit(bg, (0, 0))
-        showFlowers()
+        #showFlowers()
         imageSetter(620,455,panal)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

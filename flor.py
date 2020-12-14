@@ -160,17 +160,22 @@ class Flor:
 
     def addPolen(self,listPolen):
 
-        if listPolen == []:
-            return
-        else:
-            
-            self.polen.append(listPolen[0])
-            
-            return addPolen(self,listPolen[1:])
+        for pol in listPolen:
+            self.polen.append(pol)
+
+        return
         
     def decodeFullInfo(self):
         self.decodePos()
-        #self.decodeColor()
+        self.decodeColor()
+        return
+    
+    def printInfo(self):
+        print()
+        print("Color: ",self.color)
+        print("Index: ",self.index)
+        print("Pos: ",self.pos)
+        print()
         return
 
         
