@@ -32,6 +32,7 @@ class Abeja:
         self.bitacora = ""
         self.polen = []
         self.chromosome = []
+        self.grade = 0
         #DISTANCIA RECORRIDA AL BUSCAR FLORES
         self.distanciaRecorrida = 0
         
@@ -107,12 +108,12 @@ class Abeja:
 
     def printInfo(self):
         print()
-        print("Cadena DNA: ",self.dna)
-        print("Color: ",self.color)
-        print("Direccion: ", self.direccion)
-        print("Distancia: ", self.distancia)
-        print("Angulo de Desviacion: ",self.anguloD)
-        print("Tipo de Recorrido: ",self.tipoRecorrido)
+        #print("Cadena DNA: ",self.dna)
+        #print("Color: ",self.color)
+        #print("Direccion: ", self.direccion)
+        #print("Distancia: ", self.distancia)
+        #print("Angulo de Desviacion: ",self.anguloD)
+        #print("Tipo de Recorrido: ",self.tipoRecorrido)
         print("Cantidad de Flores Visitadas: ",self.cantidadFlores)
         print("Distancia Recorrida: ",self.distanciaRecorrida)
         print()

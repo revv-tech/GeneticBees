@@ -111,28 +111,18 @@ def newBeeGen():
 
     global poblacionAbejas
 
+    beePop = createBeeList(poblacionAbejas)
+    
     newGen = []
+    bee1 = beePop[i]
+    bee2 = beePop[j]
 
-    while len(poblacionAbejas) >= 2:
 
-        i = randint(0, len(poblacionAbejas)-1)
-        j = randint(0, len(poblacionAbejas)-1)
+    newBorns = crossBees(bee1, bee2)
 
-        while j == i:
-
-            j = randint(0, len(poblacionAbejas)-1)
-
-        bee1 = poblacionAbejas[i]
-        bee2 = poblacionAbejas[j]
-
-        poblacionAbejas.remove(bee1)
-        poblacionAbejas.remove(bee2)
-
-        newBorns = crossBees(bee1, bee2)
-
-        for newBorn in newBorns:
+    for newBorn in newBorns:
             
-            newGen.append(newBorn)
+        newGen.append(newBorn)
 
 
     poblacionAbejas = newGen
@@ -144,43 +134,120 @@ def crossBees(bee1, bee2):
     gen1 = bee1.dna
     gen2 = bee2.dna
 
-    rep = 0
-    while rep < 2:
-
-        newDna = []
-        cut = randint(1, len(gen1)-2)
+    newDna1 = []
+    newDna2 = []
+    cut = randint(0, len(gen1)-1)
         
-        for i in range (0, cut):
+    for i in range (0, cut):
 
-            bit  = gen1[i]
-            mutationValue = randint(1, 100)
+        bit  = gen1[i]
+        mutationValue = randint(1, 100)
 
-            if mutationValue < 25:
+        if mutationValue < 25:
 
-                bit = mutate(bit)
+            bit = mutate(bit)
                 
-            newDNA.append(bit)
+        newDNA1.append(bit)
 
-        for i in range (cut+1, len(gen2)):
+    for i in range (cut+1, len(gen2)):
 
-            bit  = gen2[i]
-            mutationValue = randint(1, 100)
+        bit  = gen2[i]
+        mutationValue = randint(1, 100)
 
-            if mutationValue < 25:
+        if mutationValue < 25:
 
                 bit = mutate(bit)
 
-            newDNA.append(bit)
+        newDNA1.append(bit)
 
-        bee = Abeja(newDNA)
-        bee.decodeInfo()
-        flower.chromosome.append(gen1)
-        flower.chromosome.append(gen2)
-        newBorns.append(bee)
-        rep += 1
+    for i in range(0, cut):
+
+        bit  = gen2[i]
+        mutationValue = randint(1, 100)
+
+        if mutationValue < 25:
+
+            bit = mutate(bit)
+                
+        newDNA2.append(bit)
+        
+
+    for i in range (cut+1, len(gen1)):
+
+        bit  = gen1[i]
+        mutationValue = randint(1, 100)
+
+        if mutationValue < 25:
+
+                bit = mutate(bit)
+
+        newDNA2.append(bit)
+
+    bee1 = Abeja(newDNA1)
+    bee1.decodeInfo()
+    bee2 = Abeja(newDNA1)
+    bee2.decodeInfo()
+    newBorns.append(bee1)
+    newBorns.append(bee2)
             
     return newBorns
 
+def adaptability(bee):
+
+    print("Hala Madrid")
+
+def createBeeList(beePopulation):
+
+    beeList = []
+
+    for bee in beeList:
+
+        if bee.grade < 50:
+
+            num = randint(1, 100)
+
+            if num < 50:
+
+                copyBee = bee
+                beeList.append(copyBee)
+
+        elif 50 <= bee.grade and bee.grade < 60:
+
+            for i in range(0, 3):
+
+                copyBee = bee
+                beeList.append(copyBee)
+
+        elif 60 <= bee.grade and bee.grade < 70:
+
+            for i in range(0, 6):
+
+                copyBee = bee
+                beeList.append(copyBee)
+                
+        elif 70 <= bee.grade and bee.grade < 80:
+
+            for i in range(0, 12):
+
+                copyBee = bee
+                beeList.append(copyBee)
+
+        elif 80 <= bee.grade and bee.grade < 90:
+
+            for i in range(0, 24):
+
+                copyBee = bee
+                beeList.append(copyBee)
+
+        elif 90 <= bee.grade and bee.grade <= 100:
+
+            for i in range(0, 48):
+
+                copyBee = bee
+                beeList.append(copyBee)
+
+        return beeList
+    
 
 def mutate(bit):
 
@@ -289,9 +356,16 @@ def gui():
     
     loop = True
     global poblacionFlores
+    global poblacionAbejas
     
-    genFlowerPop(1000)
-    #genAbejasGenerator(1000)
+    genFlowerPop(3000)
+    genAbejasGenerator(500)
+
+    for bee in poblacionAbejas:
+
+        bee.busquedaFlores(poblacionFlores)
+        bee.printInfo()
+        
     while loop:
         
         #garden.blit(bg, (0, 0))
@@ -305,7 +379,6 @@ def gui():
 
         pygame.display.update()
         reloj.tick(1)
-        
 
 gui()
     
