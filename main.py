@@ -139,7 +139,7 @@ def newBeeGen():
 
 
 def crossBees(bee1, bee2):
-    #HAY UNA EXCEPCION EN UNA COMBINACION QUE PUEDE DAR MAS COMBINACIONES EN LOS ULTIMOS DOS BITS SE NECESITAN 3 CAMBINACIONES PERO SOLO SE PUEDEN HACER 4 DE ACUERDO A LOS NUMEROS EN BIANRIO(REVISAR)
+   
     newBorns = []
     gen1 = bee1.dna
     gen2 = bee2.dna
@@ -249,9 +249,6 @@ def transBinaryFormat(data,rangeBits):
     
     return dnaChain
 
-
-          
-
 #GUI
 # BK
 bg = pygame.image.load('grass.png')
@@ -281,7 +278,6 @@ def showFlowers():
         flower.decodeColor()
         flower.decodePos()
         pos = flower.index
-        #print(str(flower.color))
         imageSetter((pos[0]*10)*2,abs(pos[1]*10),image)
     return
         
@@ -295,11 +291,12 @@ def gui():
     global poblacionFlores
     
     genFlowerPop(1000)
-    genAbejasGenerator(1000)
+    #genAbejasGenerator(1000)
     while loop:
-        garden.blit(bg, (0, 0))
-        #showFlowers()
-        imageSetter(620,455,panal)
+        
+        #garden.blit(bg, (0, 0))
+        showFlowers()
+        #imageSetter(620,455,panal)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()

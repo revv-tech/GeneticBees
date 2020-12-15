@@ -27,10 +27,12 @@ class Abeja:
         self.tipoRecorrido = 0
         self.distancia = 0
         self.anguloD = 0
+        #CANTIDAD DE FLORES
         self.cantidadFlores = 0
         self.bitacora = ""
         self.polen = []
         self.chromosome = []
+        #DISTANCIA RECORRIDA AL BUSCAR FLORES
         self.distanciaRecorrida = 0
         
         
@@ -118,8 +120,8 @@ class Abeja:
     
     def busquedaFlores(self,listaFlores):
 
-        print("================================== ABEJA ==================================")
-        self.printInfo()
+        #print("================================== ABEJA ==================================")
+        #self.printInfo()
         availableFlowerList = []
 
         #PUNTOS QUE FORMAN EL RANGO DE BUSQUEDA
@@ -131,16 +133,15 @@ class Abeja:
 
         thirdPoint = (round(math.cos(math.radians(self.direccion - self.anguloD))* self.distancia),round(math.sin(math.radians(self.direccion - self.anguloD))* self.distancia))
 
-        print("Area: ",secondPoint,thirdPoint)
+        #print("Area: ",secondPoint,thirdPoint)
 
         #CHECKEA SI LA FLOR DE LA LISTA PERTENECE O NO AL TRIANGULO QUE FORMAN LOS PUNTOS DE ACUERDO AL PLANO
         for flor in listaFlores:
 
             location = flor.pos
-            
-
+        
             if self.isPointIn((0,0),secondPoint,thirdPoint,location):
-                flor.printInfo()
+                #flor.printInfo()
                 availableFlowerList.append(flor)
         #TIPO DE RECORRIDO
         availableFlowerList = self.recorrido(availableFlowerList)
@@ -151,7 +152,7 @@ class Abeja:
 
             self.getFlower(available)
             
-        self.printInfo()
+        #self.printInfo()
         return
     
     def getDistanceTraveled(self,listaFlores):
@@ -169,7 +170,7 @@ class Abeja:
             j = i + 1
 
             if j == len(listaFlores):
-                print(totalD)
+                #print(totalD)
                 return totalD
             else:
                 
@@ -183,6 +184,7 @@ class Abeja:
             
         
     def isPointIn(self,p1,p2,p3,puntoBusqueda):
+        
         x1 = p1[0]
         y1 = p1[1]
         x2 = p2[0]
