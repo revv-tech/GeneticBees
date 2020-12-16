@@ -228,7 +228,7 @@ def genAbejasGenerator(n):
         newBee = Abeja(newBeeDNA)
         newBee.decodeInfo()
         #newBee.printInfo()
-        #newBee.busquedaFlores(poblacionFlores)
+        newBee.busquedaFlores(poblacionFlores)
         poblacionAbejas.append(newBee)
 
 #E: Dos Ints
@@ -290,12 +290,12 @@ def gui():
     loop = True
     global poblacionFlores
     
-    genFlowerPop(1000)
-    #genAbejasGenerator(1000)
+    genFlowerPop(6000)
+    genAbejasGenerator(500)
     while loop:
         
         #garden.blit(bg, (0, 0))
-        showFlowers()
+        #showFlowers()
         #imageSetter(620,455,panal)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -305,7 +305,8 @@ def gui():
 
         pygame.display.update()
         reloj.tick(1)
-        
+
+
 
 gui()
     

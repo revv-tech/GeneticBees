@@ -120,15 +120,14 @@ class Abeja:
     
     def busquedaFlores(self,listaFlores):
 
-        #print("================================== ABEJA ==================================")
+        print("================================== ABEJA ==================================")
         #self.printInfo()
         availableFlowerList = []
 
         #PUNTOS QUE FORMAN EL RANGO DE BUSQUEDA
         
         #pointPrincipal = (round(math.cos(math.radians(self.direccion))* self.distancia),round(math.sin(math.radians(self.direccion))* self.distancia))
-        
-
+            
         secondPoint = (round(math.cos(math.radians(self.direccion + self.anguloD))* self.distancia),round(math.sin(math.radians(self.direccion + self.anguloD))* self.distancia))
 
         thirdPoint = (round(math.cos(math.radians(self.direccion - self.anguloD))* self.distancia),round(math.sin(math.radians(self.direccion - self.anguloD))* self.distancia))
@@ -147,34 +146,33 @@ class Abeja:
         availableFlowerList = self.recorrido(availableFlowerList)
         #GET DISTANCIA
         self.distanciaRecorrida = self.getDistanceTraveled(availableFlowerList)
+        
+        
         #BUSQUEDA DE FLOR
         for available in availableFlowerList:
 
             self.getFlower(available)
             
-        #self.printInfo()
+        self.printInfo()
         return
     
     def getDistanceTraveled(self,listaFlores):
         
+        point = (0,0)
+
+        totalD = 0
         
         if listaFlores == []:
 
             return 0 
         
+        while listaFlores:
+        
+            totalD = totalD + self.distancePoints((listaFlores[0].pos,point))
 
-        totalD = 0
+            point = listaFlores[0].pos
 
-        for i in range(0,len(listaFlores)):
-
-            j = i + 1
-
-            if j == len(listaFlores):
-                #print(totalD)
-                return totalD
-            else:
-                
-                totalD = totalD + self.distancePoints((listaFlores[i].pos,listaFlores[j].pos))
+            listaFlores = listaFlores[1:]
                 
         return totalD
     
@@ -193,7 +191,14 @@ class Abeja:
         y3 = p3[1]
         x  = puntoBusqueda[0]
         y  = puntoBusqueda[1]
-          
+    
+        if p1 == p2 == p3:
+                if puntoBusqueda == p1:
+                        return True
+
+                else:
+                        return False
+    
         # Calculate area of triangle ABC 
         A = self.area (x1, y1, x2, y2, x3, y3) 
   
