@@ -21,7 +21,7 @@ class Flor:
         
         self.dna = dna
         self.color = (0, 0, 0)
-        self.pos = (63, 63)
+        self.pos = (63, 62)
         self.index = (0, 0)
         self.polen = []
         self.chromosome = []
@@ -79,7 +79,7 @@ class Flor:
         if self.polen == []:
 
             #Algoritmo usado para generar una flor totalmente random
-            print("Flor random generada")
+            return randomFlower()
 
         else:
 
@@ -116,6 +116,53 @@ class Flor:
             
             return flower
 
+    def randomFlower():
+
+        dna = []
+        n = randint(0, 7)
+        i = randint(0, 127)
+        j = randint(0, 127)
+        pos = (i, j)
+        
+        flowersPos.append(pos)
+        
+        genI = decimalToBinary(i)
+        genJ = decimalToBinary(j)
+        genColor = decimalToBinary(n)
+        
+        if len(genI) < 7:
+
+            for i in range(0, 7-len(genI)):
+
+                dna.append(0)
+                
+        for bit in genI:
+
+            dna.append(int(bit))
+
+        if len(genJ) < 7:
+
+            for i in range(0, 7-len(genJ)):
+
+                dna.append(0)
+                
+        for bit in genJ:
+
+            dna.append(int(bit))
+
+        if len(genColor) < 3:
+            
+            for i in range(0, 3-len(genColor)):
+
+                dna.append(0)
+                
+        for bit in genColor:
+
+            dna.append(int(bit))
+
+        newFlower = Flor(dna)
+        newFlower.decodeFullInfo()
+        return newFlower
 
         
     def mutate(self,bit):

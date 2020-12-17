@@ -11,7 +11,9 @@ pygame.init()
 
 #POBLACION INICIAL
 poblacionAbejas = []
+generacionesAbejas = []
 poblacionFlores = []
+indiceGeneracion = 0
 
 
 #CONVERSOR
@@ -41,7 +43,7 @@ def genFlowerPop(maxPop):
         pos = (i, j)
 
         #print(pos)
-        while pos in flowersPos:
+        while pos in flowersPos or pos == (63, 63):
 
             i = randint(0, 127)
             j = randint(0, 127)
@@ -104,7 +106,7 @@ def newFlowerGen():
         newBorn = flower.reproduce
         newGen.append(newBorn)
 
-    poblacionFlores = newGen
+    poblacionFlores += newGen
 
 
 def newBeeGen():
@@ -125,7 +127,7 @@ def newBeeGen():
         newGen.append(newBorn)
 
 
-    poblacionAbejas = newGen
+    poblacionAbejas += newGen
 
 
 def crossBees(bee1, bee2):
@@ -194,15 +196,17 @@ def crossBees(bee1, bee2):
 
 def adaptability(bee):
 
-    print("Hala Madrid")
-
+    alpha = 0.6
+    grade = int(bee.cantidadFlores/(bee.distanciaRecorrida/bee.cantidadFlores * alpha))
+    bee.calificacion = grade
+    
 def createBeeList(beePopulation):
 
     beeList = []
 
     for bee in beeList:
 
-        if bee.grade < 50:
+        if bee.calificacion < 50:
 
             num = randint(1, 100)
 
@@ -211,35 +215,35 @@ def createBeeList(beePopulation):
                 copyBee = bee
                 beeList.append(copyBee)
 
-        elif 50 <= bee.grade and bee.grade < 60:
+        elif 50 <= bee.calificacion and bee.grade < 60:
 
             for i in range(0, 3):
 
                 copyBee = bee
                 beeList.append(copyBee)
 
-        elif 60 <= bee.grade and bee.grade < 70:
+        elif 60 <= bee.calificacion and bee.grade < 70:
 
             for i in range(0, 6):
 
                 copyBee = bee
                 beeList.append(copyBee)
                 
-        elif 70 <= bee.grade and bee.grade < 80:
+        elif 70 <= bee.calificacion and bee.grade < 80:
 
             for i in range(0, 12):
 
                 copyBee = bee
                 beeList.append(copyBee)
 
-        elif 80 <= bee.grade and bee.grade < 90:
+        elif 80 <= bee.calificacion and bee.grade < 90:
 
             for i in range(0, 24):
 
                 copyBee = bee
                 beeList.append(copyBee)
 
-        elif 90 <= bee.grade and bee.grade <= 100:
+        elif 90 <= bee.calificacion and bee.grade <= 100:
 
             for i in range(0, 48):
 
@@ -295,7 +299,7 @@ def genAbejasGenerator(n):
         newBee = Abeja(newBeeDNA)
         newBee.decodeInfo()
         #newBee.printInfo()
-        newBee.busquedaFlores(poblacionFlores)
+        #newBee.busquedaFlores(poblacionFlores)
         poblacionAbejas.append(newBee)
 
 #E: Dos Ints
@@ -359,10 +363,11 @@ def gui():
     global poblacionAbejas
     
 
-    genFlowerPop(6000)
-    genAbejasGenerator(500)
+    genFlowerPop(1000)
 
-    genFlowerPop(3000)
+    #for flower in poblacionFlores:
+
+        #print(flower.pos)
     genAbejasGenerator(500)
 
     for bee in poblacionAbejas:

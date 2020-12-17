@@ -20,7 +20,6 @@ class Abeja:
         
         self.dna = dna
         self.color = (0,0,0)
-        self.pos = (63,63)
         #LA DIRECCION SE MANEJARAN POR INTEGERS PARA A LA HORA DE HACER EL RECORRIDO IDENTIFICARLO
         self.direccion = 0
         #TIPO DE RECORRIDO: SE MANEJARAN CON INTEGERS ...""
@@ -32,7 +31,7 @@ class Abeja:
         self.bitacora = ""
         self.polen = []
         self.chromosome = []
-        self.grade = 0
+        self.calificacion = 0
         #DISTANCIA RECORRIDA AL BUSCAR FLORES
         self.distanciaRecorrida = 0
         
@@ -114,14 +113,14 @@ class Abeja:
         #print("Distancia: ", self.distancia)
         #print("Angulo de Desviacion: ",self.anguloD)
         #print("Tipo de Recorrido: ",self.tipoRecorrido)
-        print("Cantidad de Flores Visitadas: ",self.cantidadFlores)
-        print("Distancia Recorrida: ",self.distanciaRecorrida)
+        print("Cantidad de flores: ", self.cantidadFlores)
+        print("Distancia recorrida: ", self.distanciaRecorrida)
         print()
         return
     
     def busquedaFlores(self,listaFlores):
 
-        print("================================== ABEJA ==================================")
+        #print("================================== ABEJA ==================================")
         #self.printInfo()
         availableFlowerList = []
 
