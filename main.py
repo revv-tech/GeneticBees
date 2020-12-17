@@ -13,6 +13,7 @@ pygame.init()
 poblacionAbejas = []
 generacionesAbejas = []
 poblacionFlores = []
+generacionesFlores = []
 indiceGeneracion = 0
 
 
@@ -23,7 +24,31 @@ indiceGeneracion = 0
 def decimalToBinary(n):  
     return bin(n).replace("0b", "")
 
+#LOOP GENERACIONES
+#E: Cantidad de Generaciones
+#S: No tiene
+#D: Calcula la cantidad de generaciones el loop
 
+def generations():
+    
+    global poblacionAbejas
+    global poblacionFlores
+    global generacionesAbejas
+    global generacionesFlores
+    
+    generacionesAbejas = generacionesAbejas + [poblacionAbejas]
+    
+    generacionesFlores = generacionesFlores + [poblacionFlores]
+    
+    newFlowerGen()
+    newBeeGen()
+    
+    return
+
+def busquedaFloresPop():
+    for bee in poblacionAbejas:
+        bee.busquedaFlores(poblacionFlores)
+    return
 #PRIMERA GEN DE FLORES
 
 def genFlowerPop(maxPop):
@@ -42,7 +67,6 @@ def genFlowerPop(maxPop):
         j = randint(0, 127)
         pos = (i, j)
 
-        #print(pos)
         while pos in flowersPos or pos == (63, 63):
 
             i = randint(0, 127)
@@ -102,11 +126,12 @@ def newFlowerGen():
     newGen = []
 
     for flower in poblacionFlores:
-
-        newBorn = flower.reproduce
+        #flower.printInfo()
+        newBorn = flower.reproduce()
+        
         newGen.append(newBorn)
 
-    poblacionFlores += newGen
+    poblacionFlores = newGen
 
 
 def newBeeGen():
@@ -116,10 +141,15 @@ def newBeeGen():
     beePop = createBeeList(poblacionAbejas)
     
     newGen = []
+    i = randint(0, len(poblacionAbejas)-1)
+    print(len(poblacionAbejas))
+    print(len(beePop))
+    print(i)
+    j = randint(0, len(poblacionAbejas)-1)
     bee1 = beePop[i]
     bee2 = beePop[j]
 
-
+    
     newBorns = crossBees(bee1, bee2)
 
     for newBorn in newBorns:
@@ -127,7 +157,7 @@ def newBeeGen():
         newGen.append(newBorn)
 
 
-    poblacionAbejas += newGen
+    poblacionAbejas = newGen
 
 
 def crossBees(bee1, bee2):
@@ -136,8 +166,8 @@ def crossBees(bee1, bee2):
     gen1 = bee1.dna
     gen2 = bee2.dna
 
-    newDna1 = []
-    newDna2 = []
+    newDNA1 = []
+    newDNA2 = []
     cut = randint(0, len(gen1)-1)
         
     for i in range (0, cut):
@@ -203,9 +233,10 @@ def adaptability(bee):
 def createBeeList(beePopulation):
 
     beeList = []
-
-    for bee in beeList:
-
+    i = 0
+    for bee in beePopulation:
+        i +=1
+        
         if bee.calificacion < 50:
 
             num = randint(1, 100)
@@ -249,8 +280,7 @@ def createBeeList(beePopulation):
 
                 copyBee = bee
                 beeList.append(copyBee)
-
-        return beeList
+    return beeList
     
 
 def mutate(bit):
@@ -298,8 +328,6 @@ def genAbejasGenerator(n):
         #NUEVA ABEJA
         newBee = Abeja(newBeeDNA)
         newBee.decodeInfo()
-        #newBee.printInfo()
-        #newBee.busquedaFlores(poblacionFlores)
         poblacionAbejas.append(newBee)
 
 #E: Dos Ints
@@ -344,6 +372,7 @@ panal = pygame.image.load("panal.png")
 def showFlowers():
 
     for flower in poblacionFlores:
+        #flower.printInfo()
         name = str(flower.color) + ".png"
         image = pygame.image.load(name)
         flower.decodeColor()
@@ -351,7 +380,7 @@ def showFlowers():
         pos = flower.index
         imageSetter((pos[0]*10)*2,abs(pos[1]*10),image)
     return
-        
+
 # ACOMODAR IMAGENES
 def imageSetter(x, y, name):
     garden.blit(name, (x, y))
@@ -362,31 +391,29 @@ def gui():
     global poblacionFlores
     global poblacionAbejas
     
-
-    genFlowerPop(1000)
-
-    #for flower in poblacionFlores:
-
-        #print(flower.pos)
-    genAbejasGenerator(500)
-
-    for bee in poblacionAbejas:
-
-        bee.busquedaFlores(poblacionFlores)
-        bee.printInfo()
-        
-
+    nF = 1000
+    nA = 1000
+    nGEN = 500
+    genFlowerPop(nF)
+    genAbejasGenerator(nA)
+    
+    print("------------------------------------- GEN #,",nGEN," -------------------------------------")
+    nGEN = nGEN - 1
     while loop:
-        
-        #garden.blit(bg, (0, 0))
-        #showFlowers()
-        #imageSetter(620,455,panal)
+        print("------------------------------------- GEN #,",nGEN," -------------------------------------")
+        busquedaFloresPop()
+        garden.blit(bg, (0, 0))
+        showFlowers()
+        imageSetter(620,455,panal)
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
             #if event.type == pygame.KEYDOWN:
-
+        if nGEN != 0:
+            generations()
+        nGEN = nGEN - 1
         pygame.display.update()
         reloj.tick(1)
 

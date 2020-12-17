@@ -153,7 +153,7 @@ class Abeja:
 
             self.getFlower(available)
             
-        self.printInfo()
+        #self.printInfo()
         return
     
     def getDistanceTraveled(self,listaFlores):

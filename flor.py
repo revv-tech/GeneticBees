@@ -1,5 +1,5 @@
 #FLOR
-
+from random import randint
 # La posición constará de 14 bits,
 # En tras palabras, 2 cadenas de 7 bits cada una
 # esto para generar numero entre 0 y 127
@@ -71,18 +71,21 @@ class Flor:
 
     def reproduce(self):
 
-        indexX = randint(0, len(self.polen)-1)
-        indexY = randint(0, len(self.polen)-1)
-
-        newDNA = []
+        
 
         if self.polen == []:
 
             #Algoritmo usado para generar una flor totalmente random
-            return randomFlower()
+            return self.randomFlower()
 
+
+        
         else:
 
+            indexX = randint(0, len(self.polen)-1)
+            indexY = randint(0, len(self.polen)-1)
+            newDNA = []
+            
             genX = self.polen[indexX]
             genY = self.polen[indexY]
 
@@ -95,7 +98,7 @@ class Flor:
 
                 if mutationValue < 25:
 
-                    bit = mutate(bit)
+                    bit = self.mutate(bit)
 
                     newDNA.append(bit)
 
@@ -106,7 +109,7 @@ class Flor:
 
                 if mutationValue < 25:
 
-                    bit = mutate(bit)
+                    bit = self.mutate(bit)
 
                     newDNA.append(bit)
 
@@ -116,50 +119,27 @@ class Flor:
             
             return flower
 
-    def randomFlower():
+    def randomFlower(self):
 
         dna = []
         n = randint(0, 7)
+        flowersPos = []
         i = randint(0, 127)
         j = randint(0, 127)
         pos = (i, j)
+        while pos in flowersPos or pos == (63, 63):
+
+            i = randint(0, 127)
+            j = randint(0, 127)
+            pos = (i, j)
         
-        flowersPos.append(pos)
+            flowersPos.append(pos)
         
-        genI = decimalToBinary(i)
-        genJ = decimalToBinary(j)
-        genColor = decimalToBinary(n)
-        
-        if len(genI) < 7:
+        genI = self.transBinaryFormat(i,7)
+        genJ = self.transBinaryFormat(j,7)
+        genColor = self.transBinaryFormat(n,3)
 
-            for i in range(0, 7-len(genI)):
-
-                dna.append(0)
-                
-        for bit in genI:
-
-            dna.append(int(bit))
-
-        if len(genJ) < 7:
-
-            for i in range(0, 7-len(genJ)):
-
-                dna.append(0)
-                
-        for bit in genJ:
-
-            dna.append(int(bit))
-
-        if len(genColor) < 3:
-            
-            for i in range(0, 3-len(genColor)):
-
-                dna.append(0)
-                
-        for bit in genColor:
-
-            dna.append(int(bit))
-
+        dna = genI + genJ + genColor
         newFlower = Flor(dna)
         newFlower.decodeFullInfo()
         return newFlower
@@ -172,7 +152,29 @@ class Flor:
         else:
             return 1
     
-            
+    #E: Dos Ints
+    #S: Una lista de bits
+    #D: Crea una lista con el numero en binario convertido
+    def transBinaryFormat(self,data,rangeBits):
+        
+        bitChain = self.decimalToBinary(data)
+        dnaChain = []
+
+        if len(bitChain) < rangeBits:
+            for i in range(0, rangeBits-len(bitChain)):
+                dnaChain.append(0)
+                    
+        for bit in bitChain:
+                
+            dnaChain.append(int(bit))
+        
+        return dnaChain
+    #CONVERSOR
+    #E: Un numero
+    #S: Un numero binario
+    #D: Convierte el numero dado en binario
+    def decimalToBinary(self,n):  
+        return bin(n).replace("0b", "")
     def binaryToDecimal(self,binary): 
           
         binary1 = binary 
@@ -222,6 +224,7 @@ class Flor:
         print("Color: ",self.color)
         print("Index: ",self.index)
         print("Pos: ",self.pos)
+        print("Lista Polen: ",self.polen)
         print()
         return
 
