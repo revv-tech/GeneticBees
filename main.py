@@ -98,7 +98,7 @@ def newFlowerGen(n):
     
         
     for flower in poblacionFlores:
-            
+        
         newBorn = flower.reproduce()
         newBorn.gen = n
         newGen.append(newBorn)
@@ -406,10 +406,12 @@ def gui():
     global poblacionFlores
     global poblacionAbejas
     finish = False
+    #PARAMETROS
     nF = 100
     nA = 100
     nGEN = 10
-    nGenAux = 10
+    nGenAux = nGEN
+    #--------------
     genFlowerPop(nF)
     genAbejasGenerator(nA)
     busquedaFloresPop()
@@ -421,6 +423,7 @@ def gui():
     active1 = False
     active2 = False
     active3 = False
+    printGensSta(poblacionAbejas,poblacionFlores,nGenAux-nGEN)
     while loop:
         
         
@@ -448,6 +451,7 @@ def gui():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
+                
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if inputRec_1.collidepoint(event.pos):
                     active1 = True
@@ -470,7 +474,9 @@ def gui():
                     if indice >= 0:
                         indice += 1
                 if event.key == pygame.K_LEFT:
-                    indice -= 1
+                    if indice != 0:
+                        indice -= 1
+                        
                 if active1:
                     if event.key == pygame.K_BACKSPACE:
                         userText = userText[-1]
@@ -488,23 +494,29 @@ def gui():
                         userText2 = userText2[-1]
                     else:
                         userText2 += event.unicode
+                        
                 if event.key == pygame.K_RETURN:
+                    
                     if userText != "" and userText1 != "":
-                        numeroAbeja = int(userText)
-                        gen = int(userText1)
+                        
+                        numeroAbeja = int(userText1)
+                        gen = int(userText)
                         textoAbeja(1000,200,25,blanco,getStadisticsBee(numeroAbeja,gen))
+                        
                     if userText != "" and userText1 == "":
                         gen = int(userText)
                         textoDatos(1000,200,25,blanco,getStadisticsGen(gen,nGenAux))
                         indice = gen
                     
                 
-        if nGEN > 0:
+        if nGEN >= 0:
             nGEN = nGEN - 1
             
         #CREA NUEVAS GENERACIONES
-        if nGEN > 0:
+        if nGEN >= 0:
+            printGensSta(poblacionAbejas,poblacionFlores,nGenAux-nGEN)
             generations(nGenAux - nGEN)
+            
             
         
         if nGEN == 0:
@@ -512,10 +524,13 @@ def gui():
             finish = True
             showFlowersI(indice)
             texto(300,650,"GENERACION #" + str(indice),90,blanco)
+            #IMPRIMIR ESTADISTICAS
             #textoDatos(1000,200,25,blanco,getStadisticsGen(indice,nGenAux))
             #textoAbeja(1000,200,25,blanco,getStadisticsBee(75,6))
             #print(getStadisticsGen(4,nGenAux))
             #print(getStadisticsBee(75,6))
+            
+        
         texto(770,20,"NUMERO GENERACION Ab.",20,blanco)
         texto(1170,20,"NUMERO ABEJA",20,blanco)
         pygame.display.update()
@@ -549,7 +564,7 @@ def getStadisticsBee(n,Gen):
 
 
 def getStadisticsGen(n,total):
-    res = ["------------------------------------- GEN #" + str(n+1) + " -------------------------------------"]
+    res = ["------------------------------------- GEN #" + str(n) + " -------------------------------------"]
     generacion = generacionesAbejas[n]
     genFlores = generacionesFlores[n]
     colorFav = []
@@ -572,9 +587,11 @@ def getStadisticsGen(n,total):
         
         if bee.mutated:
             cantMutadas += 1
+            
     for flor in genFlores:
         mayorFlores.append(flor.color)
-    
+
+
     res.append("El color favorito de la generacion fue: " + str(most_frequent(colorFav)))
     
     res.append("Promedio de direccion del recorrido fue: "+ str(promediarLista(promedioDir)) )
@@ -595,6 +612,58 @@ def getStadisticsGen(n,total):
     
     return res 
 
+def printGensSta(generacion,genFlores,n):
+
+    res = "------------------------------------- GEN #" + str(n) + " -------------------------------------"
+    colorFav = []
+    promedioDir = []
+    promedioDis = []
+    promedioAngD = []
+    cantidadVi = []
+    promCal = []
+    cantMutadas = 0
+    mayorFlores = []
+    
+    for bee in generacion:
+        
+        colorFav.append(bee.color)
+        promedioDir.append(bee.direccion)
+        promedioAngD.append(bee.anguloD)
+        promedioDis.append(bee.distanciaRecorrida)
+        promCal.append(bee.calificacion)
+        cantidadVi.append(bee.cantidadFlores)
+        
+        if bee.mutated:
+            cantMutadas += 1
+            
+    for flor in genFlores:
+        mayorFlores.append(flor.color)
+    
+    res += "El color favorito de la generacion fue: " + str(most_frequent(colorFav)) + "\n"
+    
+    res += "Promedio de direccion del recorrido fue: "+ str(promediarLista(promedioDir))+ "\n" 
+    
+    res += "Promedio del angulo de desviacion fue: "+ str(promediarLista(promedioAngD)) + "\n" 
+    
+    res += "Promedio de las calificaciones de las abejas: "+ str(promediarLista(promCal)) + "\n" 
+    
+    res += "Promedio de la distancia recorrida: " + str(promediarLista(promedioDis)) + "\n"
+    
+    res += "Cantidad de Flores Mutadas: " + str(cantMutadas) + "\n"
+    
+    res += "Cantidad Promedio de Flores Visitadas: "+ str(promediarLista(cantidadVi))+ "\n"
+
+    res += "-------FLORES-------" + "\n"
+
+    res += "Color mas comun: " + str(most_frequent(mayorFlores))+ "\n"
+    
+    print(res)
+    return
+
+        
+        
+        
+        
 
 def promediarLista(lista):
     sum=0.0
