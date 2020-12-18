@@ -509,7 +509,7 @@ def gui():
                         indice = gen
                     
                 
-        if nGEN >= 0:
+        if nGEN > 0:
             nGEN = nGEN - 1
             
         #CREA NUEVAS GENERACIONES
