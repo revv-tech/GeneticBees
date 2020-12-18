@@ -406,8 +406,8 @@ def gui():
     global poblacionFlores
     global poblacionAbejas
     finish = False
-    nF = 10
-    nA = 10
+    nF = 100
+    nA = 100
     nGEN = 10
     nGenAux = nGEN
     genFlowerPop(nF)
@@ -504,7 +504,9 @@ def gui():
             
         #CREA NUEVAS GENERACIONES
         if nGEN > 0:
+            
             generations(nGenAux - nGEN)
+            printGensSta(poblacionAbejas,poblacionFlores,nGenAux-nGEN)
             
         
         if nGEN == 0:
@@ -594,7 +596,53 @@ def getStadisticsGen(n,total):
     #res.append("Color mas comun: " + str(most_frequent(mayorFlores)))
     
     return res 
+def printGensSta(generacion,genFlores,n):
 
+    res = "------------------------------------- GEN #" + str(n) +"-------------------------------------"
+    colorFav = []
+    promedioDir = []
+    promedioDis = []
+    promedioAngD = []
+    cantidadVi = []
+    promCal = []
+    cantMutadas = 0
+    mayorFlores = []
+    
+    for bee in generacion:
+        
+        colorFav.append(bee.color)
+        promedioDir.append(bee.direccion)
+        promedioAngD.append(bee.anguloD)
+        promedioDis.append(bee.distanciaRecorrida)
+        promCal.append(bee.calificacion)
+        cantidadVi.append(bee.cantidadFlores)
+        
+        if bee.mutated:
+            cantMutadas += 1
+            
+    for flor in genFlores:
+        mayorFlores.append(flor.color)
+    
+    res += "El color favorito de la generacion fue: " + str(most_frequent(colorFav)) + "\n"
+    
+    res += "Promedio de direccion del recorrido fue: "+ str(promediarLista(promedioDir))+ "\n" 
+    
+    res += "Promedio del angulo de desviacion fue: "+ str(promediarLista(promedioAngD)) + "\n" 
+    
+    res += "Promedio de las calificaciones de las abejas: "+ str(promediarLista(promCal)) + "\n" 
+    
+    res += "Promedio de la distancia recorrida: " + str(promediarLista(promedioDis)) + "\n"
+    
+    res += "Cantidad de Flores Mutadas: " + str(cantMutadas) + "\n"
+    
+    res += "Cantidad Promedio de Flores Visitadas: "+ str(promediarLista(cantidadVi))+ "\n"
+
+    res += "-------FLORES-------" + "\n"
+
+    res += "Color mas comun: " + str(most_frequent(mayorFlores))+ "\n"
+    
+    print(res)
+    return
 def textColor(color):
 
     if color == (0,0,0):
