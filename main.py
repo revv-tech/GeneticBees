@@ -522,7 +522,8 @@ def gui():
         texto(1170,20,"NUMERO ABEJA",20,blanco)
         pygame.display.update()
         reloj.tick(1)
-        
+
+      
 #LOOP GENERACIONES
 #E: Cantidad de Generaciones
 #S: No tiene
@@ -623,9 +624,9 @@ def printGensSta(generacion,genFlores,n):
     for flor in genFlores:
         mayorFlores.append(flor.color)
     
-    res += "El color favorito de la generacion fue: " + str(most_frequent(colorFav)) + "\n"
+    res += "El color favorito de la generacion fue: " + textColor(most_frequent(colorFav)) + "\n"
     
-    res += "Promedio de direccion del recorrido fue: "+ str(promediarLista(promedioDir))+ "\n" 
+    res += "Promedio de direccion del recorrido fue: "+ textDireccion(promediarLista(promedioDir))+ "\n" 
     
     res += "Promedio del angulo de desviacion fue: "+ str(promediarLista(promedioAngD)) + "\n" 
     
