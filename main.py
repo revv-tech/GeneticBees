@@ -421,6 +421,7 @@ def gui():
     active1 = False
     active2 = False
     active3 = False
+    printGensSta(poblacionAbejas,poblacionFlores,nGenAux-nGEN)
     while loop:
         
         
@@ -503,7 +504,7 @@ def gui():
             nGEN = nGEN - 1
             
         #CREA NUEVAS GENERACIONES
-        if nGEN > 0:
+        if nGEN >= 0:
             
             generations(nGenAux - nGEN)
             printGensSta(poblacionAbejas,poblacionFlores,nGenAux-nGEN)
