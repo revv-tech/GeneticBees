@@ -491,8 +491,8 @@ def gui():
                         userText2 += event.unicode
                 if event.key == pygame.K_RETURN:
                     if userText != "" and userText1 != "":
-                        numeroAbeja = int(userText)
-                        gen = int(userText1)
+                        numeroAbeja = int(userText1)
+                        gen = int(userText)
                         textoAbeja(1000,200,25,blanco,getStadisticsBee(numeroAbeja,gen))
                     if userText != "" and userText1 == "":
                         gen = int(userText)
@@ -504,10 +504,10 @@ def gui():
             nGEN = nGEN - 1
             
         #CREA NUEVAS GENERACIONES
-        if nGEN >= 0:
+        if nGEN > 0:
             
             generations(nGenAux - nGEN)
-            printGensSta(poblacionAbejas,poblacionFlores,nGenAux-nGEN)
+        
             
         
         if nGEN == 0:
@@ -515,8 +515,8 @@ def gui():
             finish = True
             showFlowersI(indice)
             texto(300,650,"GENERACION #" + str(indice),90,blanco)
-
             
+        #printGensSta(poblacionAbejas,poblacionFlores,nGenAux-nGEN)
         texto(770,20,"NUMERO GENERACION Ab.",20,blanco)
         texto(1170,20,"NUMERO ABEJA",20,blanco)
         pygame.display.update()
