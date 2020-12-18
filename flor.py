@@ -58,6 +58,7 @@ class Flor:
         colorFlor =[]
         
         for i in range(14,17):
+            
             colorFlor.append(self.dna[i])
             
         for i in range(0, len(colorFlor)):
@@ -71,8 +72,6 @@ class Flor:
 
     def reproduce(self):
 
-        
-
         if self.polen == []:
 
             #Algoritmo usado para generar una flor totalmente random
@@ -83,13 +82,13 @@ class Flor:
         else:
 
             indexX = randint(0, len(self.polen)-1)
-            indexY = randint(0, len(self.polen)-1)
+
             newDNA = []
             
             genX = self.polen[indexX]
-            genY = self.polen[indexY]
+            genY = self.dna
 
-            cut = randint(1, len(genX)-2)
+            cut = randint(0, len(genX)-1)
 
             for i in range (0, cut):
 
@@ -100,9 +99,9 @@ class Flor:
 
                     bit = self.mutate(bit)
 
-                    newDNA.append(bit)
+                newDNA.append(bit)
 
-            for i in range (cut+1, len(genY)):
+            for i in range (cut, len(genY)):
 
                 bit  = genY[i]
                 mutationValue = randint(1, 100)
@@ -111,7 +110,7 @@ class Flor:
 
                     bit = self.mutate(bit)
 
-                    newDNA.append(bit)
+                newDNA.append(bit)
 
             flower = Flor(newDNA)
             flower.chromosome.append(genX)
@@ -127,6 +126,7 @@ class Flor:
         i = randint(0, 127)
         j = randint(0, 127)
         pos = (i, j)
+        
         while pos in flowersPos or pos == (63, 63):
 
             i = randint(0, 127)

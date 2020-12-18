@@ -34,9 +34,18 @@ class Abeja:
         self.calificacion = 0
         #DISTANCIA RECORRIDA AL BUSCAR FLORES
         self.distanciaRecorrida = 0
+        self.mutated = False
+        self.gen = 0
         
         
-
+    def adaptability(self):
+        
+        if self.cantidadFlores != 0 and self.distanciaRecorrida != 0:
+            alpha = 0.6
+            grade = self.cantidadFlores/(self.distanciaRecorrida/self.cantidadFlores * alpha) * 100
+            self.calificacion = grade
+        
+        
     def binaryListToDecimal(self,binary): 
 
         decimal = 0
@@ -107,16 +116,36 @@ class Abeja:
 
     def printInfo(self):
         print()
-        #print("Cadena DNA: ",self.dna)
-        #print("Color: ",self.color)
-        #print("Direccion: ", self.direccion)
-        #print("Distancia: ", self.distancia)
-        #print("Angulo de Desviacion: ",self.anguloD)
-        #print("Tipo de Recorrido: ",self.tipoRecorrido)
+        print("Cadena DNA: ",self.dna)
+        print("Color: ",self.color)
+        print("Direccion: ", self.direccion)
+        print("Distancia: ", self.distancia)
+        print("Angulo de Desviacion: ",self.anguloD)
+        print("Tipo de Recorrido: ",self.tipoRecorrido)
         print("Cantidad de flores: ", self.cantidadFlores)
         print("Distancia recorrida: ", self.distanciaRecorrida)
         print()
         return
+    
+    def bitTa(self):
+        
+        bita = ["GEN #" + str(self.gen)]
+        bita.append("Cadena DNA: " + str(self.dna))
+        bita.append("Color: " + str(self.color))
+        bita.append("Direccion: " + str(self.direccion))
+        bita.append("Angulo de Desviacion: " + str(self.anguloD))
+        bita.append("Tipo de Recorrido: " + str(self.tipoRecorrido))
+        bita.append("Cantidad de flores: " + str(self.cantidadFlores))
+        bita.append("Distancia recorrida: " + str(self.distanciaRecorrida))
+        bita.append("Calificacion: " + str(self.calificacion))
+        bita.append("Mutada: " + str(self.mutated))
+        bita.append("Padres: ")
+        if self.chromosome:
+            bita.append("GENERACION #" + str(self.chromosome[0].gen-1))
+            bita.append("#1" + str(self.chromosome[0].dna))
+            bita.append("#2" + str(self.chromosome[1].dna))
+            
+        return bita
     
     def busquedaFlores(self,listaFlores):
 

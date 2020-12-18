@@ -24,31 +24,7 @@ indiceGeneracion = 0
 def decimalToBinary(n):  
     return bin(n).replace("0b", "")
 
-#LOOP GENERACIONES
-#E: Cantidad de Generaciones
-#S: No tiene
-#D: Calcula la cantidad de generaciones el loop
 
-def generations():
-    
-    global poblacionAbejas
-    global poblacionFlores
-    global generacionesAbejas
-    global generacionesFlores
-    
-    generacionesAbejas = generacionesAbejas + [poblacionAbejas]
-    
-    generacionesFlores = generacionesFlores + [poblacionFlores]
-    
-    newFlowerGen()
-    newBeeGen()
-    
-    return
-
-def busquedaFloresPop():
-    for bee in poblacionAbejas:
-        bee.busquedaFlores(poblacionFlores)
-    return
 #PRIMERA GEN DE FLORES
 
 def genFlowerPop(maxPop):
@@ -114,49 +90,46 @@ def genFlowerPop(maxPop):
         poblacionFlores.append(newFlower)
 
 
-    #for flor in poblacionFlores:
-
-     #   print(flor.dna)
-
-
-def newFlowerGen():
+def newFlowerGen(n):
 
     global poblacionFlores
 
     newGen = []
-
-    for flower in poblacionFlores:
-        #flower.printInfo()
-        newBorn = flower.reproduce()
+    
         
+    for flower in poblacionFlores:
+            
+        newBorn = flower.reproduce()
+        newBorn.gen = n
         newGen.append(newBorn)
-
+    
     poblacionFlores = newGen
+    
 
-
-def newBeeGen():
+def newBeeGen(n):
 
     global poblacionAbejas
 
     beePop = createBeeList(poblacionAbejas)
     
     newGen = []
-    i = randint(0, len(poblacionAbejas)-1)
-    print(len(poblacionAbejas))
-    print(len(beePop))
-    print(i)
-    j = randint(0, len(poblacionAbejas)-1)
-    bee1 = beePop[i]
-    bee2 = beePop[j]
 
-    
-    newBorns = crossBees(bee1, bee2)
+    while len(newGen) < len(poblacionAbejas):
+        
+        i = randint(0, len(beePop)-1)
+        j = randint(0, len(beePop)-1)
 
-    for newBorn in newBorns:
+        
+        bee1 = beePop[i]
+        bee2 = beePop[j]
+
+        
+        newBorns = crossBees(bee1, bee2)
+
+        for newBorn in newBorns:
+            newBorn.gen = n
+            newGen.append(newBorn)
             
-        newGen.append(newBorn)
-
-
     poblacionAbejas = newGen
 
 
@@ -165,31 +138,34 @@ def crossBees(bee1, bee2):
     newBorns = []
     gen1 = bee1.dna
     gen2 = bee2.dna
-
+    factorMut = 8
     newDNA1 = []
     newDNA2 = []
     cut = randint(0, len(gen1)-1)
-        
+    mutaedDNA1 = False
+    mutaedDNA2 = False
     for i in range (0, cut):
 
         bit  = gen1[i]
         mutationValue = randint(1, 100)
 
-        if mutationValue < 25:
-
+        if mutationValue < factorMut:
+            
             bit = mutate(bit)
-                
+            mutaedDNA1 = True
+            
         newDNA1.append(bit)
 
-    for i in range (cut+1, len(gen2)):
+    for i in range (cut, len(gen2)):
 
         bit  = gen2[i]
         mutationValue = randint(1, 100)
 
-        if mutationValue < 25:
-
+        if mutationValue < factorMut:
+            
                 bit = mutate(bit)
-
+                mutaedDNA1 = True
+                
         newDNA1.append(bit)
 
     for i in range(0, cut):
@@ -197,21 +173,22 @@ def crossBees(bee1, bee2):
         bit  = gen2[i]
         mutationValue = randint(1, 100)
 
-        if mutationValue < 25:
-
+        if mutationValue < factorMut:
+    
             bit = mutate(bit)
-                
+            mutaedDNA2 = True
         newDNA2.append(bit)
         
 
-    for i in range (cut+1, len(gen1)):
+    for i in range (cut, len(gen1)):
 
         bit  = gen1[i]
         mutationValue = randint(1, 100)
 
-        if mutationValue < 25:
+        if mutationValue < factorMut:
 
-                bit = mutate(bit)
+            bit = mutate(bit)
+            mutaedDNA2 = True
 
         newDNA2.append(bit)
 
@@ -219,24 +196,34 @@ def crossBees(bee1, bee2):
     bee1.decodeInfo()
     bee2 = Abeja(newDNA1)
     bee2.decodeInfo()
+    
+    bee1.chromosome += [bee1,bee2]
+    bee2.chromosome += [bee1,bee2]
+    
+    if mutaedDNA1:
+        bee1.mutated = True
+    if mutaedDNA2:
+        bee2.mutated = True
     newBorns.append(bee1)
     newBorns.append(bee2)
+    
             
     return newBorns
 
-def adaptability(bee):
 
-    alpha = 0.6
-    grade = int(bee.cantidadFlores/(bee.distanciaRecorrida/bee.cantidadFlores * alpha))
-    bee.calificacion = grade
     
 def createBeeList(beePopulation):
 
     beeList = []
-    i = 0
-    for bee in beePopulation:
-        i +=1
+    
+    
         
+    for bee in beePopulation:
+
+        if len(beeList) == 1000:
+        
+            return beeList
+            
         if bee.calificacion < 50:
 
             num = randint(1, 100)
@@ -246,40 +233,42 @@ def createBeeList(beePopulation):
                 copyBee = bee
                 beeList.append(copyBee)
 
-        elif 50 <= bee.calificacion and bee.grade < 60:
+        elif 50 <= bee.calificacion and bee.calificacion < 60:
 
             for i in range(0, 3):
 
                 copyBee = bee
                 beeList.append(copyBee)
 
-        elif 60 <= bee.calificacion and bee.grade < 70:
+        elif 60 <= bee.calificacion and bee.calificacion < 70:
 
             for i in range(0, 6):
 
                 copyBee = bee
                 beeList.append(copyBee)
-                
-        elif 70 <= bee.calificacion and bee.grade < 80:
+                    
+        elif 70 <= bee.calificacion and bee.calificacion < 80:
 
             for i in range(0, 12):
 
                 copyBee = bee
                 beeList.append(copyBee)
 
-        elif 80 <= bee.calificacion and bee.grade < 90:
+        elif 80 <= bee.calificacion and bee.calificacion < 90:
 
             for i in range(0, 24):
 
                 copyBee = bee
                 beeList.append(copyBee)
 
-        elif 90 <= bee.calificacion and bee.grade <= 100:
+        elif 90 <= bee.calificacion and bee.calificacion <= 100:
 
             for i in range(0, 48):
 
                 copyBee = bee
                 beeList.append(copyBee)
+        
+    
     return beeList
     
 
@@ -350,72 +339,341 @@ def transBinaryFormat(data,rangeBits):
 
 #GUI
 # BK
-bg = pygame.image.load('grass.png')
+bg = pygame.image.load('grass_2.png')
 # IMAGENES
 # Colores
 blanco = (255, 255, 255)
 negro = (0, 0, 0)
 # Crea la ventana
-garden = pygame.display.set_mode((1270,950))
+garden = pygame.display.set_mode((1300,740))
 
 # Nombre de la ventana
 pygame.display.set_caption('Bees&Flowers by Sven&Rev')
 reloj = pygame.time.Clock()
 
-# FUENTE
-font = pygame.font.SysFont("Minecraft", 20)
-font2 = pygame.font.SysFont("Minecraft", 40)
-font3 = pygame.font.SysFont("Minecraft", 10)
+fontNew = pygame.font.SysFont(None, 35)
 panal = pygame.image.load("panal.png")
 
 #MOSTRAR IMAGENES DE FLORES
 def showFlowers():
 
-    for flower in poblacionFlores:
-        #flower.printInfo()
-        name = str(flower.color) + ".png"
-        image = pygame.image.load(name)
-        flower.decodeColor()
-        flower.decodePos()
-        pos = flower.index
-        imageSetter((pos[0]*10)*2,abs(pos[1]*10),image)
+    for i in range(0,127):
+        for j in range(0,127):
+
+            if searchPos((i,j),poblacionFlores):
+                flower = searchPos((i,j),poblacionFlores)
+                name = str(flower.color) + ".png"
+                image = pygame.image.load(name)
+                flower.decodeColor()
+                flower.decodePos()
+                pos = flower.index
+                imageSetter(int(j*50/10),int(i*90/10),image)
+            
+    return
+def showFlowersI(i):
+    gen = generacionesFlores[i]
+    for i in range(0,127):
+        for j in range(0,127):
+
+            if searchPos((i,j),gen):
+                flower = searchPos((i,j),gen)
+                name = str(flower.color) + ".png"
+                image = pygame.image.load(name)
+                flower.decodeColor()
+                flower.decodePos()
+                pos = flower.index
+                imageSetter(int(j*50/10),int(i*90/10),image)
+            
     return
 
+def searchPos(pos,lista):
+
+    for flor in lista:
+        if pos == flor.index:
+            return flor
+        
+    return False
 # ACOMODAR IMAGENES
 def imageSetter(x, y, name):
     garden.blit(name, (x, y))
 
 def gui():
-    
+    indice = 0
+    userText = ""
+    userText1 = ""
+    userText2 = ""
     loop = True
     global poblacionFlores
     global poblacionAbejas
-    
-    nF = 1000
-    nA = 1000
-    nGEN = 500
+    finish = False
+    nF = 100
+    nA = 100
+    nGEN = 10
+    nGenAux = 10
     genFlowerPop(nF)
     genAbejasGenerator(nA)
+    busquedaFloresPop()
     
-    print("------------------------------------- GEN #,",nGEN," -------------------------------------")
     nGEN = nGEN - 1
+    inputRec_1 = pygame.Rect(700,50,140,32)
+    inputRec_2 = pygame.Rect(1100,50,140,32)
+    #inputRec_3 = pygame.Rect(1100,50,140,32)
+    active1 = False
+    active2 = False
+    active3 = False
     while loop:
-        print("------------------------------------- GEN #,",nGEN," -------------------------------------")
-        busquedaFloresPop()
+        
+        
+        text_surface = fontNew.render(userText,True,(255,255,255))
+        text_surface1 = fontNew.render(userText1,True,(255,255,255))
+        text_surface2 = fontNew.render(userText2,True,(255,255,255))
+        
         garden.blit(bg, (0, 0))
-        showFlowers()
-        imageSetter(620,455,panal)
-
+        imageSetter(320,320,panal)
+        
+        pygame.draw.rect(garden,blanco,inputRec_1,2)
+        pygame.draw.rect(garden,blanco,inputRec_2,2)
+        #pygame.draw.rect(garden,blanco,inputRec_3,2)
+        garden.blit(text_surface,(inputRec_1.x + 5,inputRec_1.y + 5))
+        garden.blit(text_surface1,(inputRec_2.x + 5,inputRec_2.y + 5))
+        #garden.blit(text_surface2,(inputRec_3.x + 5,inputRec_3.y + 5))
+        
+        if not finish:
+            texto(300,650,"GENERACION #" + str(nGenAux-nGEN),90,blanco)
+            showFlowers()
+        
+        
+        
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
-            #if event.type == pygame.KEYDOWN:
-        if nGEN != 0:
-            generations()
-        nGEN = nGEN - 1
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if inputRec_1.collidepoint(event.pos):
+                    active1 = True
+                    active2 = False
+                    active3 = False
+                if inputRec_2.collidepoint(event.pos):
+                    active1 = False
+                    active2 = True
+                    active3 = False
+                    """
+                if inputRec_3.collidepoint(event.pos):
+                    active1 = False
+                    active2 = False
+                    active3 = True
+                    """
+                
+                
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RIGHT:
+                    if indice >= 0:
+                        indice += 1
+                if event.key == pygame.K_LEFT:
+                    indice -= 1
+                if active1:
+                    if event.key == pygame.K_BACKSPACE:
+                        userText = userText[-1]
+                    else:
+                        userText += event.unicode
+
+                if active2:
+                    if event.key == pygame.K_BACKSPACE:
+                        userText1 = userText1[-1]
+                    else:
+                        userText1 += event.unicode
+                        
+                if active3:
+                    if event.key == pygame.K_BACKSPACE:
+                        userText2 = userText2[-1]
+                    else:
+                        userText2 += event.unicode
+                if event.key == pygame.K_RETURN:
+                    if userText != "" and userText1 != "":
+                        numeroAbeja = int(userText)
+                        gen = int(userText1)
+                        textoAbeja(1000,200,25,blanco,getStadisticsBee(numeroAbeja,gen))
+                    if userText != "" and userText1 == "":
+                        gen = int(userText)
+                        textoDatos(1000,200,25,blanco,getStadisticsGen(gen,nGenAux))
+                        indice = gen
+                    
+                
+        if nGEN > 0:
+            nGEN = nGEN - 1
+            
+        #CREA NUEVAS GENERACIONES
+        if nGEN > 0:
+            generations(nGenAux - nGEN)
+            
+        
+        if nGEN == 0:
+            
+            finish = True
+            showFlowersI(indice)
+            texto(300,650,"GENERACION #" + str(indice),90,blanco)
+            #textoDatos(1000,200,25,blanco,getStadisticsGen(indice,nGenAux))
+            #textoAbeja(1000,200,25,blanco,getStadisticsBee(75,6))
+            #print(getStadisticsGen(4,nGenAux))
+            #print(getStadisticsBee(75,6))
+        texto(770,20,"NUMERO GENERACION Ab.",20,blanco)
+        texto(1170,20,"NUMERO ABEJA",20,blanco)
         pygame.display.update()
         reloj.tick(1)
+        
+#LOOP GENERACIONES
+#E: Cantidad de Generaciones
+#S: No tiene
+#D: Calcula la cantidad de generaciones el loop
+
+def generations(n):
+    
+    global poblacionAbejas
+    global poblacionFlores
+    global generacionesAbejas
+    global generacionesFlores
+    
+    generacionesAbejas = generacionesAbejas + [poblacionAbejas]
+    
+    generacionesFlores = generacionesFlores + [poblacionFlores]
+    
+    newFlowerGen(n)
+    newBeeGen(n)
+    #BUSQUEDA
+    busquedaFloresPop()
+    return
+
+def getStadisticsBee(n,Gen):
+    abeja = generacionesAbejas[Gen][n]
+    return abeja.bitTa()
+
+
+def getStadisticsGen(n,total):
+    res = ["------------------------------------- GEN #" + str(n+1) + " -------------------------------------"]
+    generacion = generacionesAbejas[n]
+    genFlores = generacionesFlores[n]
+    colorFav = []
+    promedioDir = []
+    promedioDis = []
+    promedioAngD = []
+    cantidadVi = []
+    promCal = []
+    cantMutadas = 0
+    mayorFlores = []
+    
+    for bee in generacion:
+        
+        colorFav.append(bee.color)
+        promedioDir.append(bee.direccion)
+        promedioAngD.append(bee.anguloD)
+        promedioDis.append(bee.distanciaRecorrida)
+        promCal.append(bee.calificacion)
+        cantidadVi.append(bee.cantidadFlores)
+        
+        if bee.mutated:
+            cantMutadas += 1
+    for flor in genFlores:
+        mayorFlores.append(flor.color)
+    
+    res.append("El color favorito de la generacion fue: " + str(most_frequent(colorFav)))
+    
+    res.append("Promedio de direccion del recorrido fue: "+ str(promediarLista(promedioDir)) )
+    
+    res.append("Promedio del angulo de desviacion fue: "+ str(promediarLista(promedioAngD))  )
+    
+    res.append("Promedio de las calificaciones de las abejas: "+ str(promediarLista(promCal)) )
+    
+    res.append("Promedio de la distancia recorrida: " + str(promediarLista(promedioDis)))
+    
+    res.append("Cantidad de Flores Mutadas: " + str(cantMutadas) )
+    
+    res.append("Cantidad Promedio de Flores Visitadas: "+ str(promediarLista(cantidadVi)))
+
+    res.append("-------FLORES-------")
+
+    res.append("Color mas comun: " + str(most_frequent(mayorFlores)))
+    
+    return res 
+
+
+def promediarLista(lista):
+    sum=0.0
+    for i in range(0,len(lista)):
+        sum=sum+lista[i]
+ 
+    return sum/len(lista)
+def most_frequent(List): 
+    counter = 0
+    num = List[0] 
+      
+    for i in List: 
+        curr_frequency = List.count(i) 
+        if(curr_frequency> counter): 
+            counter = curr_frequency 
+            num = i 
+  
+    return num 
+
+def busquedaFloresPop():
+    for bee in poblacionAbejas:
+        bee.busquedaFlores(poblacionFlores)
+        bee.adaptability()
+    return
+        
+# Configuracion texto
+#E:  Un string, un color, un numero
+#S:  No tiene
+#D:  Verifica la superficie en la que se escribira el texto
+
+def texto_aux(texto,fuente,color):
+     superficie = fuente.render(texto,True,color)
+     return superficie, superficie.get_rect()
+
+#E: Tres numeros, un color, un string
+#S: Un texto
+#D: Crea el texto
+     
+def texto(x,y,texto,tamano,color):
+     font = pygame.font.SysFont(None, tamano)
+     superficie,rectangulo = texto_aux(texto, font,color)
+     rectangulo.center= ((x),(y))
+     garden.blit(superficie,rectangulo)
+     pygame.display.update()
+     
+def textoDatos(x,y,tamano,color,listaText):
+
+    texto(x,y,listaText[0],tamano,color)
+    texto(x,y+30,listaText[1],tamano,color)
+    texto(x,y+60,listaText[2],tamano,color)
+    texto(x,y+90,listaText[3],tamano,color)
+    texto(x,y+120,listaText[4],tamano,color)
+    texto(x,y+150,listaText[5],tamano,color)
+    texto(x,y+180,listaText[6],tamano,color)
+    texto(x,y+210,listaText[7],tamano,color)
+    texto(x,y+240,listaText[8],tamano,color)
+    texto(x,y+270,listaText[9],tamano,color)  
+        
+    return
+
+def textoAbeja(x,y,tamano,color,listaText):
+
+    texto(x,y,listaText[0],tamano,color)
+    texto(x-15,y+30,listaText[1],tamano,color)
+    texto(x,y+60,listaText[2],tamano,color)
+    texto(x,y+90,listaText[3],tamano,color)
+    texto(x,y+120,listaText[4],tamano,color)
+    texto(x,y+150,listaText[5],tamano,color)
+    texto(x,y+180,listaText[6],tamano,color)
+
+    texto(x,y+210,listaText[7],tamano,color)
+    texto(x,y+240,listaText[8],tamano,color)
+    texto(x,y+300,listaText[9],tamano,color)
+    texto(x,y+330,listaText[10],tamano,color)
+    texto(x,y+360,listaText[11],tamano,color)
+    texto(x,y+390,listaText[12],tamano,color)
+    texto(x,y+420,listaText[13],tamano,color)
+    
+    return
 
 
 gui()
