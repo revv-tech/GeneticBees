@@ -5,7 +5,7 @@ from random import randint
 from flor import Flor
 from abejas import Abeja
 from numpy import binary_repr
-
+from collections import Counter
 pygame.init()
 
 
@@ -515,10 +515,8 @@ def gui():
             finish = True
             showFlowersI(indice)
             texto(300,650,"GENERACION #" + str(indice),90,blanco)
-            #textoDatos(1000,200,25,blanco,getStadisticsGen(indice,nGenAux))
-            #textoAbeja(1000,200,25,blanco,getStadisticsBee(75,6))
-            #print(getStadisticsGen(4,nGenAux))
-            #print(getStadisticsBee(75,6))
+
+            
         texto(770,20,"NUMERO GENERACION Ab.",20,blanco)
         texto(1170,20,"NUMERO ABEJA",20,blanco)
         pygame.display.update()
@@ -624,7 +622,8 @@ def printGensSta(generacion,genFlores,n):
             
     for flor in genFlores:
         mayorFlores.append(flor.color)
-    
+
+    mayorFlores = mostCommons(mayorFlores)
     res += "El color favorito de la generacion fue: " + textColor(most_frequent(colorFav)) + "\n"
     
     res += "Promedio de direccion del recorrido fue: "+ textDireccion(promediarLista(promedioDir))+ "\n" 
@@ -641,8 +640,10 @@ def printGensSta(generacion,genFlores,n):
 
     res += "-------FLORES-------" + "\n"
 
-    res += "Color mas comun: " + str(most_frequent(mayorFlores))+ "\n"
-    
+    res += "Colores mas comunes: "+ "\n"
+    res += "#1" + str(mayorFlores[0])+ "\n"
+    res += "#2" + str(mayorFlores[1])+ "\n"
+    res += "#3" + str(mayorFlores[2])+ "\n"
     print(res)
     return
 def textColor(color):
@@ -721,6 +722,7 @@ def promediarLista(lista):
         sum=sum+lista[i]
  
     return sum/len(lista)
+
 def most_frequent(List): 
     counter = 0
     num = List[0] 
@@ -731,7 +733,10 @@ def most_frequent(List):
             counter = curr_frequency 
             num = i 
   
-    return num 
+    return num
+def mostCommons(lista):
+    most_common = [item for item in Counter(lista).most_common(3)]
+    return most_common
 
 def busquedaFloresPop():
     for bee in poblacionAbejas:
