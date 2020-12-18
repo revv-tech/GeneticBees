@@ -98,7 +98,7 @@ def newFlowerGen(n):
     
         
     for flower in poblacionFlores:
-        
+            
         newBorn = flower.reproduce()
         newBorn.gen = n
         newGen.append(newBorn)
@@ -396,7 +396,7 @@ def searchPos(pos,lista):
 # ACOMODAR IMAGENES
 def imageSetter(x, y, name):
     garden.blit(name, (x, y))
-
+ 
 def gui():
     indice = 0
     userText = ""
@@ -406,12 +406,10 @@ def gui():
     global poblacionFlores
     global poblacionAbejas
     finish = False
-    #PARAMETROS
-    nF = 100
-    nA = 100
+    nF = 10
+    nA = 10
     nGEN = 10
     nGenAux = nGEN
-    #--------------
     genFlowerPop(nF)
     genAbejasGenerator(nA)
     busquedaFloresPop()
@@ -423,7 +421,6 @@ def gui():
     active1 = False
     active2 = False
     active3 = False
-    printGensSta(poblacionAbejas,poblacionFlores,nGenAux-nGEN)
     while loop:
         
         
@@ -451,7 +448,6 @@ def gui():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
-                
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if inputRec_1.collidepoint(event.pos):
                     active1 = True
@@ -474,9 +470,7 @@ def gui():
                     if indice >= 0:
                         indice += 1
                 if event.key == pygame.K_LEFT:
-                    if indice != 0:
-                        indice -= 1
-                        
+                    indice -= 1
                 if active1:
                     if event.key == pygame.K_BACKSPACE:
                         userText = userText[-1]
@@ -494,15 +488,11 @@ def gui():
                         userText2 = userText2[-1]
                     else:
                         userText2 += event.unicode
-                        
                 if event.key == pygame.K_RETURN:
-                    
                     if userText != "" and userText1 != "":
-                        
-                        numeroAbeja = int(userText1)
-                        gen = int(userText)
+                        numeroAbeja = int(userText)
+                        gen = int(userText1)
                         textoAbeja(1000,200,25,blanco,getStadisticsBee(numeroAbeja,gen))
-                        
                     if userText != "" and userText1 == "":
                         gen = int(userText)
                         textoDatos(1000,200,25,blanco,getStadisticsGen(gen,nGenAux))
@@ -513,10 +503,8 @@ def gui():
             nGEN = nGEN - 1
             
         #CREA NUEVAS GENERACIONES
-        if nGEN >= 0:
-            printGensSta(poblacionAbejas,poblacionFlores,nGenAux-nGEN)
+        if nGEN > 0:
             generations(nGenAux - nGEN)
-            
             
         
         if nGEN == 0:
@@ -524,13 +512,10 @@ def gui():
             finish = True
             showFlowersI(indice)
             texto(300,650,"GENERACION #" + str(indice),90,blanco)
-            #IMPRIMIR ESTADISTICAS
             #textoDatos(1000,200,25,blanco,getStadisticsGen(indice,nGenAux))
             #textoAbeja(1000,200,25,blanco,getStadisticsBee(75,6))
             #print(getStadisticsGen(4,nGenAux))
             #print(getStadisticsBee(75,6))
-            
-        
         texto(770,20,"NUMERO GENERACION Ab.",20,blanco)
         texto(1170,20,"NUMERO ABEJA",20,blanco)
         pygame.display.update()
@@ -564,7 +549,7 @@ def getStadisticsBee(n,Gen):
 
 
 def getStadisticsGen(n,total):
-    res = ["------------------------------------- GEN #" + str(n) + " -------------------------------------"]
+    res = ["------------------------------------- GEN #" + str(n+1) + " -------------------------------------"]
     generacion = generacionesAbejas[n]
     genFlores = generacionesFlores[n]
     colorFav = []
@@ -587,14 +572,12 @@ def getStadisticsGen(n,total):
         
         if bee.mutated:
             cantMutadas += 1
-            
     for flor in genFlores:
         mayorFlores.append(flor.color)
-
-
-    res.append("El color favorito de la generacion fue: " + str(most_frequent(colorFav)))
     
-    res.append("Promedio de direccion del recorrido fue: "+ str(promediarLista(promedioDir)) )
+    res.append("El color favorito de la generacion fue: " + textColor(most_frequent(colorFav)))
+    
+    res.append("Promedio de direccion del recorrido fue: "+ textDireccion(promediarLista(promedioDir)))
     
     res.append("Promedio del angulo de desviacion fue: "+ str(promediarLista(promedioAngD))  )
     
@@ -606,62 +589,79 @@ def getStadisticsGen(n,total):
     
     res.append("Cantidad Promedio de Flores Visitadas: "+ str(promediarLista(cantidadVi)))
 
-    res.append("-------FLORES-------")
+    #res.append("-------FLORES-------")
 
-    res.append("Color mas comun: " + str(most_frequent(mayorFlores)))
+    #res.append("Color mas comun: " + str(most_frequent(mayorFlores)))
     
     return res 
 
-def printGensSta(generacion,genFlores,n):
+def textColor(color):
 
-    res = "------------------------------------- GEN #" + str(n) + " -------------------------------------"
-    colorFav = []
-    promedioDir = []
-    promedioDis = []
-    promedioAngD = []
-    cantidadVi = []
-    promCal = []
-    cantMutadas = 0
-    mayorFlores = []
-    
-    for bee in generacion:
-        
-        colorFav.append(bee.color)
-        promedioDir.append(bee.direccion)
-        promedioAngD.append(bee.anguloD)
-        promedioDis.append(bee.distanciaRecorrida)
-        promCal.append(bee.calificacion)
-        cantidadVi.append(bee.cantidadFlores)
-        
-        if bee.mutated:
-            cantMutadas += 1
-            
-    for flor in genFlores:
-        mayorFlores.append(flor.color)
-    
-    res += "El color favorito de la generacion fue: " + str(most_frequent(colorFav)) + "\n"
-    
-    res += "Promedio de direccion del recorrido fue: "+ str(promediarLista(promedioDir))+ "\n" 
-    
-    res += "Promedio del angulo de desviacion fue: "+ str(promediarLista(promedioAngD)) + "\n" 
-    
-    res += "Promedio de las calificaciones de las abejas: "+ str(promediarLista(promCal)) + "\n" 
-    
-    res += "Promedio de la distancia recorrida: " + str(promediarLista(promedioDis)) + "\n"
-    
-    res += "Cantidad de Flores Mutadas: " + str(cantMutadas) + "\n"
-    
-    res += "Cantidad Promedio de Flores Visitadas: "+ str(promediarLista(cantidadVi))+ "\n"
+    if color == (0,0,0):
 
-    res += "-------FLORES-------" + "\n"
+        return "Negro"
 
-    res += "Color mas comun: " + str(most_frequent(mayorFlores))+ "\n"
-    
-    print(res)
-    return
+    elif color == (255,0,0):
 
-        
-        
+        return "Rojo"
+
+    elif color == (0,255,0):
+
+        return "Verde"
+
+    elif color == (0,0,255):
+
+        return "Azul"
+
+    elif color == (255,255,0):
+
+        return "Morado"
+
+    elif color == (0,255,255):
+
+        return "Amarillo"
+
+    elif color == (255,0,255):
+
+        return "Rosado"
+
+    elif color == (255,255,255):
+
+        return "Blanco"
+
+def textDireccion(angulo):
+
+    if (angulo >= 0 and angulo < 30) or (angulo >= 330 and angulo <= 360):
+
+        return "Este"
+
+    elif angulo >= 30 and angulo < 60:
+
+        return "Noreste"
+
+    elif angulo >= 60 and angulo < 120:
+
+        return "Norte"
+
+    elif angulo >= 120 and angulo < 150:
+
+        return "Noroeste"
+
+    elif angulo >= 150 and angulo < 210:
+
+        return "Oeste"
+
+    elif angulo >= 210 and angulo < 240:
+
+        return "Suroeste"
+
+    elif angulo >= 240 and angulo < 300:
+
+        return "Sur"
+
+    elif angulo >= 300 and angulo < 330:
+
+        return "Sureste"
         
         
 
